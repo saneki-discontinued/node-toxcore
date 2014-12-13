@@ -11,5 +11,8 @@
     "ref": "~0.3.2",
     "ref-struct": "~0.0.6",
     "ref-array": "~0.0.4"
+  },
+  "devDependencies": {
+    "should": "~3.3.1"
   }
 }
