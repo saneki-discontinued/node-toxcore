@@ -1,0 +1,15 @@
+{
+  "name": "toxcore",
+  "version": "0.0.0",
+  "description": "Node bindings for libtoxcore",
+  "main": "./lib/main.js",
+  "directories": {
+    "lib": "./lib"
+  },
+  "dependencies": {
+    "ffi": "~1.2.7",
+    "ref": "~0.3.2",
+    "ref-struct": "~0.0.6",
+    "ref-array": "~0.0.4"
+  }
+}
