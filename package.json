@@ -10,9 +10,11 @@
     "ffi": "~1.2.7",
     "ref": "~0.3.2",
     "ref-struct": "~0.0.6",
-    "ref-array": "~0.0.4"
+    "ref-array": "~0.0.4",
+    "underscore": "~1.7.0"
   },
   "devDependencies": {
+    "buffertools": "~2.1.2",
     "should": "~3.3.1"
   }
 }
