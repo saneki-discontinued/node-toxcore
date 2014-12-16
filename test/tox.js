@@ -24,6 +24,21 @@ describe('Tox', function() {
     });
   });
 
+  describe('#getFriendList()', function() {
+    it('should return an empty array in callback when no friends', function(done) {
+      tox.getFriendList(function(err, friends) {
+        friends.length.should.equal(0);
+        done(err);
+      });
+    });
+  });
+
+  describe('#getFriendListSync()', function() {
+    it('should return an empty array when no friends', function() {
+      tox.getFriendListSync().length.should.equal(0);
+    });
+  });
+
   describe('#hasFriend()', function() {
     it('should return false in callback if not added', function(done) {
       tox.hasFriend(0, function(err, res) {
