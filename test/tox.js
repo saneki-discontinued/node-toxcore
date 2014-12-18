@@ -9,6 +9,37 @@ buffertools.extend(); // Extend Buffer.prototype
 describe('Tox', function() {
   var tox = new toxcore.Tox();
 
+  var toxWithoutHandle = new toxcore.Tox();
+  toxWithoutHandle.handle = undefined;
+
+  describe('#checkHandle()', function() {
+    it('should return an error in callback when no handle', function(done) {
+      toxWithoutHandle.checkHandle(function(err) {
+        err.should.exist;
+        done();
+      });
+    });
+  });
+
+  describe('#checkHandleSync()', function() {
+    it('should throw an error when no handle', function() {
+      try {
+        toxWithoutHandle.checkHandleSync();
+        should.fail('checkHandleSync should have thrown an error');
+      } catch(e) {
+        e.should.exist;
+      }
+    });
+
+    it('shouldn\'t throw an error when handle', function() {
+      try {
+        tox.checkHandleSync();
+      } catch(e) {
+        should.fail('checkHandleSync shouldn\'t have thrown an error');
+      }
+    });
+  });
+
   describe('#countFriendList()', function() {
     it('should return 0 in callback when no friend', function(done) {
       tox.countFriendList(function(err, res) {
@@ -57,6 +88,10 @@ describe('Tox', function() {
   describe('#hasHandle()', function() {
     it('should return true if a tox handle is present', function() {
       tox.hasHandle().should.be.true;
+    });
+
+    it('should return false if no tox handle is present', function() {
+      toxWithoutHandle.hasHandle().should.be.false;
     });
   });
 
