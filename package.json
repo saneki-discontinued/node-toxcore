@@ -4,6 +4,10 @@
   "description": "Node bindings for libtoxcore",
   "keywords": ["im", "libtoxcore", "node-toxcore", "skype", "tox", "toxcore"],
   "license": "WTFPL",
+  "author": {
+    "name": "saneki",
+    "email": "s@neki.me"
+  },
 
   "main": "./lib/main.js",
   "files": ["lib"],
