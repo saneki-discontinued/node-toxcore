@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "Node bindings for libtoxcore",
   "keywords": ["im", "libtoxcore", "node-toxcore", "skype", "tox", "toxcore"],
+  "license": "WTFPL",
 
   "main": "./lib/main.js",
   "files": ["lib"],
