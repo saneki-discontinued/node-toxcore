@@ -12,6 +12,9 @@ describe('Tox', function() {
   var toxWithoutHandle = new toxcore.Tox();
   toxWithoutHandle.handle = undefined;
 
+  var addressHexStringRegex = /^[a-fA-F0-9]{76}$/;
+  var keyHexStringRegex = /^[a-fA-F0-9]{64}$/;
+
   describe('#checkHandle()', function() {
     it('should return an error in callback when no handle', function(done) {
       toxWithoutHandle.checkHandle(function(err) {
@@ -55,6 +58,36 @@ describe('Tox', function() {
     });
   });
 
+  describe('#getAddress()', function() {
+    it('should return a Buffer of the expected size in callback', function(done) {
+      tox.getAddress(function(err, address) {
+        address.length.should.equal(38); // TOX_FRIEND_ADDRESS_SIZE
+        done(err);
+      });
+    });
+  });
+
+  describe('#getAddressSync()', function() {
+    it('should return a Buffer of the expected size', function() {
+      tox.getAddressSync().length.should.equal(38);
+    });
+  });
+
+  describe('#getAddressHex()', function() {
+    it('should return a hex string of the expected size in callback', function(done) {
+      tox.getAddressHex(function(err, address) {
+        address.should.match(addressHexStringRegex);
+        done(err);
+      });
+    });
+  });
+
+  describe('#getAddressHexSync()', function() {
+    it('should return a hex string of the expected size', function() {
+      tox.getAddressHexSync().should.match(addressHexStringRegex);
+    });
+  });
+
   describe('#getFriendList()', function() {
     it('should return an empty array in callback when no friends', function(done) {
       tox.getFriendList(function(err, friends) {
@@ -67,6 +100,100 @@ describe('Tox', function() {
   describe('#getFriendListSync()', function() {
     it('should return an empty array when no friends', function() {
       tox.getFriendListSync().length.should.equal(0);
+    });
+  });
+
+  describe('#getKeys()', function() {
+    it('should return keys with expected lengths in callback', function(done) {
+      tox.getKeys(true, function(err, pubkey, privkey) {
+        privkey.length.should.equal(32);
+        pubkey.length.should.equal(32);
+        done(err);
+      });
+    });
+
+    it('should only return public key in callback if specified', function(done) {
+      tox.getKeys(false, function(err, pubkey, privkey) {
+        should.exist(pubkey);
+        should.not.exist(privkey);
+        done(err);
+      });
+    });
+  });
+
+  describe('#getKeysSync()', function() {
+    it('should return keys with expected lengths', function() {
+      var keys = tox.getKeysSync(true);
+      keys.length.should.equal(2);
+      keys.forEach(function(key) {
+        key.length.should.equal(32);
+      });
+    });
+
+    it('should only return public key if specified', function() {
+      var keys = tox.getKeysSync(false);
+      keys.length.should.equal(1);
+      keys[0].length.should.equal(32);
+    });
+  });
+
+  describe('#getPrivateKey()', function() {
+    it('should return a Buffer of the expected size in callback', function(done) {
+      tox.getPrivateKey(function(err, key) {
+        key.length.should.equal(32); // TOX_CLIENT_ID_SIZE
+        done(err);
+      });
+    });
+  });
+
+  describe('#getPrivateKeySync()', function() {
+    it('should return a Buffer of the expected size', function() {
+      tox.getPrivateKeySync().length.should.equal(32);
+    });
+  });
+
+  describe('#getPrivateKeyHex()', function() {
+    it('should return a hex string of the expected size in callback', function(done) {
+      tox.getPrivateKeyHex(function(err, key) {
+        key.should.match(keyHexStringRegex);
+        done(err);
+      });
+    });
+  });
+
+  describe('#getPrivateKeyHexSync()', function() {
+    it('should return a hex string of the expected size', function() {
+      tox.getPrivateKeyHexSync().should.match(keyHexStringRegex);
+    });
+  });
+
+  describe('#getPublicKey()', function() {
+    it('should return a Buffer of the expected size in callback', function(done) {
+      tox.getPublicKey(function(err, key) {
+        key.length.should.equal(32); // TOX_CLIENT_ID_SIZE
+        done(err);
+      });
+    });
+  });
+
+  describe('#getPublicKeySync()', function() {
+    it('should return a Buffer of the expected size', function() {
+      tox.getPublicKeySync().length.should.equal(32);
+    });
+  });
+
+  describe('#getPublicKeyHex()', function() {
+    it('should return a hex string of the expected size in callback', function(done) {
+      tox.getPublicKeyHex(function(err, key) {
+        key.should.match(keyHexStringRegex);
+        done(err);
+      });
+    });
+  });
+
+  describe('#getPublicKeyHexSync()', function() {
+    it('should return a hex string of the expected size', function() {
+      tox.getPublicKeyHexSync().should.match(keyHexStringRegex);
     });
   });
 
