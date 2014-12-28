@@ -5,7 +5,7 @@
   "keywords": ["im", "libtoxcore", "node-toxcore", "skype", "tox", "toxcore"],
 
   "main": "./lib/main.js",
-  "files": ["./lib"],
+  "files": ["lib"],
   "directories": {
     "lib": "./lib"
   },
