@@ -252,4 +252,18 @@ describe('Tox', function() {
     });
   });
 
+  describe('#size()', function() {
+    it('should return a positive integer in callback', function(done) {
+      tox.size(function(err, size) {
+        size.should.be.above(0);
+        done(err);
+      });
+    });
+  });
+
+  describe('#sizeSync()', function() {
+    it('should return a positive integer', function() {
+      tox.sizeSync().should.be.above(0);
+    });
+  });
 });
