@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v0.0.3
+------
+- Sync/async functions for file transfer functions in `tox.h`.
+- Support for file transfer events.
+
 v0.0.2
 ------
 - Event objects for events in `tox.h`.
