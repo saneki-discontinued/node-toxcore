@@ -19,6 +19,10 @@
     "url": "https://github.com/saneki/node-toxcore.git"
   },
 
+  "scripts": {
+    "test": "mocha"
+  },
+
   "dependencies": {
     "buffertools": "~2.1.2",
     "ffi": "~1.2.7",
