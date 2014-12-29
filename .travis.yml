@@ -1,6 +1,5 @@
 language: node_js
 node_js:
-  - "0.11"
   - "0.10"
 # This is basically copied from toxcore's .travis.yml, without libcheck
 # Unsure of a better way of getting toxcore+deps installed
