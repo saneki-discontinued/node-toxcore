@@ -7,5 +7,11 @@ node-toxcore
 
 Node.js bindings for [libtoxcore], built off of [node-ffi].
 
+
+### Documentation
+
+Generating the documentation should be as easy as `grunt jsdoc`.
+
+
 [libtoxcore]:https://github.com/irungentoo/toxcore
 [node-ffi]:https://github.com/node-ffi/node-ffi

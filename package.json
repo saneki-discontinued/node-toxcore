@@ -20,6 +20,7 @@
   },
 
   "scripts": {
+    "docs": "jsdoc -d docs lib/tox.js",
     "test": "mocha"
   },
 
@@ -33,6 +34,9 @@
   },
 
   "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-jsdoc": "<=0.6.0",
+    "jsdoc": "<=3.3.0",
     "mocha": "~2.1.0",
     "should": "~3.3.1"
   }
