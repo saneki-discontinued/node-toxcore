@@ -2,7 +2,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
     jsdoc: {
       dist: {
-        src: ['lib/tox.js'],
+        src: ['lib/tox.js', 'lib/events.js'],
         options: {
           destination: 'doc'
         }
