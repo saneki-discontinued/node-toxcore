@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v0.0.4
+------
+- Sync/async functions for saving/loading (old save and load functions renamed to saveToFile, loadFromFile).
+- Async hash function.
+
 v0.0.3
 ------
 - Sync/async functions for file transfer functions in `tox.h`.
