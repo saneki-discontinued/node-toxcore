@@ -15,6 +15,8 @@ describe('Tox', function() {
   var addressHexStringRegex = /^[a-fA-F0-9]{76}$/;
   var keyHexStringRegex = /^[a-fA-F0-9]{64}$/;
 
+  var abcHashed = 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad';
+
   describe('#checkHandle()', function() {
     it('should return an error in callback when no handle', function(done) {
       toxWithoutHandle.checkHandle(function(err) {
@@ -222,9 +224,23 @@ describe('Tox', function() {
     });
   });
 
-  describe('#hashSync()', function() {
-    var abcHashed = 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad';
+  describe('#hash()', function() {
+    it('should correctly hash a Buffer', function(done) {
+      tox.hash(new Buffer('abc'), function(err, hash) {
+        hash.toHex().toLowerCase().should.equal(abcHashed);
+        done(err);
+      });
+    });
 
+    it('should correctly hash a String', function(done) {
+      tox.hash('abc', function(err, hash) {
+        hash.toHex().toLowerCase().should.equal(abcHashed);
+        done(err);
+      });
+    });
+  });
+
+  describe('#hashSync()', function() {
     it('should correctly hash a Buffer', function() {
       tox.hashSync(new Buffer('abc')).toHex().toLowerCase().should.equal(abcHashed);
     });
