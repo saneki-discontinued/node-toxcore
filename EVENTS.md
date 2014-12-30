@@ -16,6 +16,9 @@ Name                | Event object name        | Description
 avatarData          | AvatarDataEvent          | Emitted when avatar data is received.
 avatarInfo          | AvatarInfoEvent          | Emitted when avatar info is received.
 connectionStatus    | ConnectionStatusEvent    | Emitted when a friend's connection status changes.
+fileControl         | FileControlEvent         | Emitted when file control info is received.
+fileData            | FileDataEvent            | Emitted when file data is received.
+fileSendRequest     | FileSendRequestEvent     | Emitted when someone requests to send a file.
 friendAction        | FriendActionEvent        | Emitted when a friend action (/me message).
 friendMessage       | FriendMessageEvent       | Emitted when a friend message is received.
 friendRequest       | FriendRequestEvent       | Emitted when a friend request is received.
