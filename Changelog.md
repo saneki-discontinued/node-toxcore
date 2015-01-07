@@ -1,6 +1,10 @@
 Changelog
 =========
 
+v0.0.5
+------
+- Sync/async functions for bootstrapping, relays, checking if connected.
+
 v0.0.4
 ------
 - Sync/async functions for saving/loading (old save and load functions renamed to saveToFile, loadFromFile).
