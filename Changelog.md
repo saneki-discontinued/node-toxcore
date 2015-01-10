@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v0.0.6
+------
+- Fix for `joinGroupchat`.
+- Added typescript declaration file.
+
 v0.0.5
 ------
 - Sync/async functions for bootstrapping, relays, checking if connected.
