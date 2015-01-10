@@ -10,7 +10,7 @@
   },
 
   "main": "./lib/main.js",
-  "files": ["lib"],
+  "files": ["lib", "typings"],
   "directories": {
     "lib": "./lib"
   },

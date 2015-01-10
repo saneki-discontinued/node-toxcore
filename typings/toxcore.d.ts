@@ -52,11 +52,11 @@ declare module 'toxcore' {
     // Wrapper functions
     // -----------------
 
-    addFriend(addr: string, message: string, callback?: Function): void;
+    addFriend(addr: string, message: string, callback?: NumberCallback): void;
     addFriendSync(addr: string, message: string): any;
     addFriendNoRequest(publicKey: Buffer, callback?: NumberCallback): void;
     addFriendNoRequestSync(publicKey: Buffer): number;
-    addGroupchat(callback?: Function): void;
+    addGroupchat(callback?: NumberCallback): void;
     addGroupchatSync(): any;
     addTCPRelay(address: string, port: number, publicKey: string, callback?: ErrorCallback): void;
     addTCPRelay(address: string, port: number, publicKey: Buffer, callback?: ErrorCallback): void;
@@ -66,19 +66,19 @@ declare module 'toxcore' {
     bootstrapFromAddress(address: string, port: number, publicKey: Buffer, callback?: ErrorCallback): void;
     bootstrapFromAddressSync(address: string, port: number, publicKey: string): void;
     bootstrapFromAddressSync(address: string, port: number, publicKey: Buffer): void;
-    countFriendList(callback?: Function): void;
+    countFriendList(callback?: NumberCallback): void;
     countFriendListSync(): number;
     deleteFriend(friendnum: number, callback?: BooleanCallback): void;
     deleteFriendSync(friendnum: number): boolean;
     deleteGroupchat(groupnum: number, callback?: BooleanCallback): void;
     deleteGroupchatSync(groupnum: number): boolean;
-    do(callback?: Function): void;
+    do(callback?: ErrorCallback): void;
     doSync(): void;
     getAddress(callback?: BufferCallback): void;
     getAddressSync(): Buffer;
     getAddressHex(callback?: StringCallback): void;
     getAddressHexSync(): string;
-    getDoInterval(callback?: Function): void;
+    getDoInterval(callback?: NumberCallback): void;
     getDoIntervalSync(): number;
     getFileDataRemaining(friendnum: number, filenum: number, sendReceive: number, callback?: NumberCallback): void;
     getFileDataRemainingSync(friendnum: number, filenum: number, sendReceive: number): number;
@@ -86,7 +86,7 @@ declare module 'toxcore' {
     getFileDataSizeSync(friendnum: number): number;
     getFriendLastOnline(friendnum: number, callback?: NumberCallback): void;
     getFriendLastOnlineSync(friendnum: number): number;
-    getFriendList(callback?: Function): void;
+    getFriendList(callback?: NumberArrayCallback): void;
     getFriendListSync(): number[];
     getFriendName(friendnum: number, callback?: StringCallback): void;
     getFriendNameSync(friendnum: number): string;
@@ -100,7 +100,7 @@ declare module 'toxcore' {
     getGroupchatsSync(): number[];
     getGroupchatCount(callback?: NumberCallback): void;
     getGroupchatCountSync(): number;
-    getGroupchatPeername(groupnum: number, peernum: number, callback?: Function): void;
+    getGroupchatPeername(groupnum: number, peernum: number, callback?: StringCallback): void;
     getGroupchatPeernameSync(groupnum: number, peernum: number): any;
     getGroupchatPeerCount(groupnum: number, callback?: NumberCallback): void;
     getGroupchatPeerCountSync(groupnum: number): any;
@@ -132,13 +132,13 @@ declare module 'toxcore' {
     isConnectedSync(): boolean;
     joinGroupchat(friendnum: number, data: Buffer, callback?: ErrorCallback): void;
     joinGroupchatSync(friendnum: number, data: Buffer): any;
-    kill(callback?: Function): void;
+    kill(callback?: ErrorCallback): void;
     killSync(): void;
     invite(friendnum: number, groupnum: number, callback?: BooleanCallback): void;
     inviteSync(friendnum: number, groupnum: number): boolean;
-    load(buffer: Buffer, callback?: Function): void;
+    load(buffer: Buffer, callback?: NumberCallback): void;
     loadSync(buffer: Buffer): number;
-    loadFromFile(filepath: string, callback?: Function): void;
+    loadFromFile(filepath: string, callback?: ErrorCallback): void;
     newFileSender(friendnum: number, filesize: number, filename: string, callback?: NumberCallback): void;
     newFileSenderSync(friendnum: number, filesize: number, filename: string): number;
     on(name: string, callback?: Function): void;
@@ -148,9 +148,9 @@ declare module 'toxcore' {
     requestAvatarDataSync(friendnum: number): boolean;
     requestAvatarInfo(friendnum: number, callback?: BooleanCallback): void;
     requestAvatarInfoSync(friendnum: number): boolean;
-    save(callback?: Function): void;
+    save(callback?: BufferCallback): void;
     saveSync(): Buffer;
-    saveToFile(filepath: string, callback?: Function): void;
+    saveToFile(filepath: string, callback?: ErrorCallback): void;
     sendFileControl(friendnum: number, sendReceive: number, filenum: number, messageId: number, data: Buffer, callback?: ErrorCallback): void;
     sendFileControlSync(friendnum: number, sendReceive: number, filenum: number, messageId: number, data: Buffer): void;
     sendFileData(friendnum: number, filenum: number, data: Buffer, callback?: ErrorCallback): void;
