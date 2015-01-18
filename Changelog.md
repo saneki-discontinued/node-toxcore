@@ -1,6 +1,12 @@
 Changelog
 =========
 
+v0.0.7
+------
+- Several sync functions improved.
+- Typescript declaration file updated.
+- Fix for GroupNamelistChangeEvent#peer().
+
 v0.0.6
 ------
 - Fix for `joinGroupchat`.
