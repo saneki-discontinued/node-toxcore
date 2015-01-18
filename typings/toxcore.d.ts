@@ -53,11 +53,11 @@ declare module 'toxcore' {
     // -----------------
 
     addFriend(addr: string, message: string, callback?: NumberCallback): void;
-    addFriendSync(addr: string, message: string): any;
+    addFriendSync(addr: string, message: string): number;
     addFriendNoRequest(publicKey: Buffer, callback?: NumberCallback): void;
     addFriendNoRequestSync(publicKey: Buffer): number;
     addGroupchat(callback?: NumberCallback): void;
-    addGroupchatSync(): any;
+    addGroupchatSync(): number;
     addTCPRelay(address: string, port: number, publicKey: string, callback?: ErrorCallback): void;
     addTCPRelay(address: string, port: number, publicKey: Buffer, callback?: ErrorCallback): void;
     addTCPRelaySync(address: string, port: number, publicKey: string): void;
@@ -101,11 +101,11 @@ declare module 'toxcore' {
     getGroupchatCount(callback?: NumberCallback): void;
     getGroupchatCountSync(): number;
     getGroupchatPeername(groupnum: number, peernum: number, callback?: StringCallback): void;
-    getGroupchatPeernameSync(groupnum: number, peernum: number): any;
+    getGroupchatPeernameSync(groupnum: number, peernum: number): string;
     getGroupchatPeerCount(groupnum: number, callback?: NumberCallback): void;
-    getGroupchatPeerCountSync(groupnum: number): any;
+    getGroupchatPeerCountSync(groupnum: number): number;
     getGroupchatPeerNames(groupnum: number, callback?: StringArrayCallback): void;
-    getGroupchatPeerNamesSync(groupnum: number): any;
+    getGroupchatPeerNamesSync(groupnum: number): string[];
     getKeys(includePriv: boolean, callback?: ToxKeysCallback): void;
     getKeysSync(includePriv: boolean): Buffer[];
     getName(callback?: StringCallback): void;
@@ -131,7 +131,7 @@ declare module 'toxcore' {
     isConnected(callback?: BooleanCallback): void;
     isConnectedSync(): boolean;
     joinGroupchat(friendnum: number, data: Buffer, callback?: ErrorCallback): void;
-    joinGroupchatSync(friendnum: number, data: Buffer): any;
+    joinGroupchatSync(friendnum: number, data: Buffer): number;
     kill(callback?: ErrorCallback): void;
     killSync(): void;
     invite(friendnum: number, groupnum: number, callback?: BooleanCallback): void;
