@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v0.0.8
+------
+- Sync/async groupchat title functions.
+- groupTitle event.
+
 v0.0.7
 ------
 - Several sync functions improved.
