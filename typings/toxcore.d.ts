@@ -1,4 +1,4 @@
-// Type definitions for toxcore 0.0.5
+// Type definitions for toxcore 0.0.7
 // Project: https://github.com/saneki/node-toxcore
 // Definitions by: saneki <https://github.com/saneki>
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
@@ -106,6 +106,8 @@ declare module 'toxcore' {
     getGroupchatPeerCountSync(groupnum: number): number;
     getGroupchatPeerNames(groupnum: number, callback?: StringArrayCallback): void;
     getGroupchatPeerNamesSync(groupnum: number): string[];
+    getGroupchatTitle(groupnum: number, callback?: StringCallback): void;
+    getGroupchatTitleSync(groupnum: number): string;
     getKeys(includePriv: boolean, callback?: ToxKeysCallback): void;
     getKeysSync(includePriv: boolean): Buffer[];
     getName(callback?: StringCallback): void;
@@ -163,6 +165,8 @@ declare module 'toxcore' {
     sendMessageSync(message: string, friend: number): number;
     setAvatar(format: number, buffer: Buffer, callback?: BooleanCallback): void;
     setAvatarSync(format: number, buffer: Buffer): boolean;
+    setGroupchatTitle(groupnum: number, title: string, callback?: ErrorCallback): void;
+    setGroupchatTitleSync(groupnum: number, title: string): void;
     setName(name: string, callback?: BooleanCallback): void;
     setNameSync(name: string): boolean;
     setStatusMessage(status: string, callback?: BooleanCallback): void;

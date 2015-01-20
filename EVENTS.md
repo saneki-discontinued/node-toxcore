@@ -26,6 +26,7 @@ groupAction         | GroupActionEvent         | Emitted when a group action is 
 groupInvite         | GroupInviteEvent         | Emitted when invited to a group.
 groupMessage        | GroupMessageEvent        | Emitted when a group message is received.
 groupNamelistChange | GroupNamelistChangeEvent | Emitted when a group's namelist changes.
+groupTitle          | GroupTitleEvent          | Emitted when a group's title changes.
 nameChange          | NameChangeEvent          | Emitted when a friend's name changes.
 readReceipt         | ReadReceiptEvent         | Emitted when a receipt is received.
 statusMessage       | StatusMessageEvent       | Emitted when a friend's status message changes.
