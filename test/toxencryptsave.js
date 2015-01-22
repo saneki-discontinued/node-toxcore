@@ -15,6 +15,10 @@ describe('ToxEncryptSave', function() {
         done(err);
       });
     });
+
+    it('should act synchronously when no callback passed (if sync option enabled)', function() {
+      enc.getEncryptionExtraLength().should.be.type('number').and.be.greaterThan(0);
+    });
   });
 
   describe('#getEncryptionExtraLengthSync()', function() {
@@ -30,6 +34,10 @@ describe('ToxEncryptSave', function() {
         done(err);
       });
     });
+
+    it('should act synchronously when no callback passed (if sync option enabled)', function() {
+      enc.getKeyLength().should.be.type('number').and.be.greaterThan(0);
+    });
   });
 
   describe('#getKeyLengthSync()', function() {
@@ -44,6 +52,10 @@ describe('ToxEncryptSave', function() {
         res.should.be.type('number').and.be.greaterThan(0);
         done(err);
       });
+    });
+
+    it('should act synchronously when no callback passed (if sync option enabled)', function() {
+      enc.getSaltLength().should.be.type('number').and.be.greaterThan(0);
     });
   });
 
@@ -66,6 +78,10 @@ describe('ToxEncryptSave', function() {
         res.should.be.type('number').and.be.greaterThan(0);
         done(err);
       });
+    });
+
+    it('should act synchronously when no callback passed (if sync option enabled)', function() {
+      encWithHandle.getEncryptedSize().should.be.type('number').and.be.greaterThan(0);
     });
   });
 
