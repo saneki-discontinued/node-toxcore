@@ -99,4 +99,23 @@ describe('ToxEncryptSave', function() {
       encWithHandle.getEncryptedSizeSync().should.be.type('number').and.be.greaterThan(0);
     });
   });
+
+  describe('#isDataEncrypted()', function() {
+    it('should return false in callback if data magic number is 0', function(done) {
+      enc.isDataEncrypted(new Buffer([0, 0]), function(err, res) {
+        res.should.be.false;
+        done(err);
+      });
+    });
+
+    it('should act synchronously when no callback passed (if sync option enabled)', function() {
+      enc.isDataEncrypted(new Buffer([0, 0])).should.be.false;
+    });
+  });
+
+  describe('#isDataEncryptedSync()', function() {
+    it('should return false if data magic number is 0', function() {
+      enc.isDataEncryptedSync(new Buffer([0, 0])).should.be.false;
+    });
+  });
 });
