@@ -118,4 +118,50 @@ describe('ToxEncryptSave', function() {
       enc.isDataEncryptedSync(new Buffer([0, 0])).should.be.false;
     });
   });
+
+  describe('#deriveKeyFromPass()', function() {
+    it('should return some data in callback', function(done) {
+      enc.deriveKeyFromPass('somePassword', function(err, keyBuffer) {
+        keyBuffer.length.should.be.greaterThan(0);
+        done(err);
+      });
+    });
+
+    it('should act synchronously when no callback passed (if sync option enabled)', function() {
+      var keyBuffer = enc.deriveKeyFromPass('somePassword');
+      keyBuffer.length.should.be.greaterThan(0);
+    });
+  });
+
+  describe('#deriveKeyFromPassSync()', function() {
+    it('should return some data', function() {
+      var keyBuffer = enc.deriveKeyFromPassSync('somePassword');
+      keyBuffer.length.should.be.greaterThan(0);
+    });
+  });
+
+  describe('#deriveKeyWithSalt()', function() {
+    var salt = new Buffer(32); // TOX_SALT_LENGTH
+
+    it('should return some data in callback', function(done) {
+      enc.deriveKeyWithSalt('somePassword', salt, function(err, keyBuffer) {
+        keyBuffer.length.should.be.greaterThan(0);
+        done(err);
+      });
+    });
+
+    it('should act synchronously when no callback passed (if sync option enabled)', function() {
+      var keyBuffer = enc.deriveKeyWithSalt('somePassword', salt);
+      keyBuffer.length.should.be.greaterThan(0);
+    });
+  });
+
+  describe('#deriveKeyWithSaltSync()', function() {
+    var salt = new Buffer(32); // TOX_SALT_LENGTH
+
+    it('should return some data', function() {
+      var keyBuffer = enc.deriveKeyWithSaltSync('somePassword', salt);
+      keyBuffer.length.should.be.greaterThan(0);
+    });
+  });
 });
