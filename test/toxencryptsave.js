@@ -218,10 +218,35 @@ describe('ToxEncryptSave', function() {
   });
 
   describe('#encryptedKeySave(), #decryptedKeySave()', function() {
-    // Todo
+    it('should save and load', function(done) {
+      var key = enc.deriveKeyFromPassSync('somePassword');
+
+      encWithHandle.encryptedKeySave(key, function(err, data) {
+        if(err) {
+          done(err);
+          return;
+        }
+
+        data.should.exist;
+
+        encWithHandle.encryptedKeyLoad(data, key, function(err) {
+          done(err);
+        });
+      });
+    });
+
+    it('should save and load synchronously when no callbacks passed (if sync option enabled)', function() {
+      var key = enc.deriveKeyFromPassSync('somePassword'),
+          data = encWithHandle.encryptedKeySave(key);
+      encWithHandle.encryptedKeyLoad(data, key);
+    });
   });
 
   describe('#encryptedKeySaveSync(), #decryptedKeySaveSync()', function() {
-    // Todo
+    it('should save and load', function() {
+      var key = enc.deriveKeyFromPassSync('somePassword'),
+          data = encWithHandle.encryptedKeySaveSync(key);
+      encWithHandle.encryptedKeyLoadSync(data, key);
+    });
   });
 });
