@@ -1,8 +1,11 @@
 var assert = require('assert');
+var buffertools = require('buffertools');
 var path = require('path');
 var should = require('should');
 var toxcore = require(path.join(__dirname, '..', 'lib', 'main'));
 var ToxEncryptSave = toxcore.ToxEncryptSave;
+
+buffertools.extend(); // Extend Buffer.prototype
 
 describe('ToxEncryptSave', function() {
   var enc = new ToxEncryptSave();
@@ -163,5 +166,62 @@ describe('ToxEncryptSave', function() {
       var keyBuffer = enc.deriveKeyWithSaltSync('somePassword', salt);
       keyBuffer.length.should.be.greaterThan(0);
     });
+  });
+
+  describe('#passKeyEncrypt(), #passKeyDecrypt()', function() {
+    it('should encrypt and decrypt some data', function(done) {
+      var key = enc.deriveKeyFromPassSync('somePassword'),
+          data = new Buffer(16);
+
+      // Encrypt data
+      enc.passKeyEncrypt(data, key, function(err, encData) {
+        if(err) {
+          done(err);
+          return;
+        }
+
+        encData.length.should.be.greaterThan(0);
+
+        // Decrypt encrypted data
+        enc.passKeyDecrypt(encData, key, function(err, decData) {
+          should(decData.equals(data)).be.ok;
+          done(err);
+        });
+      });
+    });
+
+    it('should act synchronously when no callback passed (if sync option enabled)', function() {
+      var key = enc.deriveKeyFromPassSync('somePassword'),
+          data = new Buffer(16),
+          encData = enc.passKeyEncrypt(data, key);
+
+      encData.length.should.be.greaterThan(0);
+
+      var decData = enc.passKeyDecrypt(encData, key);
+
+      should(decData.equals(data)).be.ok;
+    });
+  });
+
+  describe('#passKeyEncryptSync(), #passKeyDecryptSync()', function() {
+    it('should encrypt and decrypt some data', function() {
+      var key = enc.deriveKeyFromPassSync('somePassword'),
+          data = new Buffer(16),
+          encData = enc.passKeyEncryptSync(data, key);
+
+      encData.length.should.be.greaterThan(0);
+
+      var decData = enc.passKeyDecryptSync(encData, key);
+
+      should(decData.equals(data)).be.ok;
+    });
+  });
+
+  describe('#encryptedKeySave(), #decryptedKeySave()', function() {
+    // Todo
+  });
+
+  describe('#encryptedKeySaveSync(), #decryptedKeySaveSync()', function() {
+    // Todo
   });
 });
