@@ -249,4 +249,42 @@ describe('ToxEncryptSave', function() {
       encWithHandle.encryptedKeyLoadSync(data, key);
     });
   });
+
+  describe('#passEncrypt(), #passDecrypt()', function() {
+    it('should encrypt and decrypt', function(done) {
+      var passphrase = 'somePassword',
+          data = new Buffer(100);
+      enc.passEncrypt(data, passphrase, function(err, encData) {
+        if(err) {
+          done(err);
+          return;
+        }
+
+        enc.passDecrypt(encData, passphrase, function(err, decData) {
+          should(decData.equals(data)).be.ok;
+          done(err);
+        });
+      });
+    });
+
+    it('should encrypt and decrypt synchronously when no callbacks passed (if sync option enabled)', function() {
+      var passphrase = 'somePassword',
+          data = new Buffer(100);
+      var encData = enc.passEncrypt(data, passphrase);
+      encData.should.exist;
+      var decData = enc.passDecrypt(encData, passphrase);
+      should(decData.equals(data)).be.ok;
+    });
+  });
+
+  describe('#passEncryptSync(), #passDecryptSync()', function() {
+    it('should encrypt and decrypt', function() {
+      var passphrase = 'somePassword',
+          data = new Buffer(100);
+      var encData = enc.passEncryptSync(data, passphrase);
+      encData.should.exist;
+      var decData = enc.passDecryptSync(encData, passphrase);
+      should(decData.equals(data)).be.ok;
+    });
+  });
 });
