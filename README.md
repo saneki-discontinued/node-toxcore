@@ -8,6 +8,12 @@ node-toxcore
 Node.js bindings for [libtoxcore], built off of [node-ffi].
 
 
+### Warning
+
+**node-toxcore** is in its very early stages. Until it reaches `v0.1.0`,
+things may unexpectedly change! Be wary.
+
+
 ### Documentation
 
 Generating the documentation should be as easy as `grunt jsdoc`.
