@@ -287,4 +287,37 @@ describe('ToxEncryptSave', function() {
       should(decData.equals(data)).be.ok;
     });
   });
+
+  describe('#encryptedSave(), #encryptedLoad()', function() {
+    it('should encrypt and decrypt a Tox instance asynchronously', function(done) {
+      var passphrase = 'somePasswordYo';
+      encWithHandle.encryptedSave(passphrase, function(err, encData) {
+        if(err) {
+          done(err);
+          return;
+        }
+
+        encWithHandle.encryptedLoad(encData, passphrase, function(err) {
+          done(err);
+        });
+      });
+    });
+
+    it('should encrypt and decrypt a Tox instance synchronously when no callbacks passed (if sync option enabled)',
+      function(done) {
+      var passphrase = 'somePasswordYo',
+          encData = encWithHandle.encryptedSave(passphrase);
+      encWithHandle.encryptedLoad(encData, passphrase);
+      done();
+    });
+  });
+
+  describe('#encryptedSaveSync(), #encryptedLoadSync()', function() {
+    it('should encrypt and decrypt a Tox instance synchronously', function(done) {
+      var passphrase = 'somePasswordYo',
+          encData = encWithHandle.encryptedSave(passphrase);
+      encWithHandle.encryptedLoad(encData, passphrase);
+      done();
+    });
+  });
 });
