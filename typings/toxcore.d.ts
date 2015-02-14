@@ -132,6 +132,7 @@ declare module 'toxcore' {
     hasFriendSync(): boolean;
     isConnected(callback?: BooleanCallback): void;
     isConnectedSync(): boolean;
+    isStarted(): boolean;
     joinGroupchat(friendnum: number, data: Buffer, callback?: ErrorCallback): void;
     joinGroupchatSync(friendnum: number, data: Buffer): number;
     kill(callback?: ErrorCallback): void;
@@ -175,6 +176,8 @@ declare module 'toxcore' {
     setUserStatusSync(status: number): boolean;
     size(callback?: NumberCallback): void;
     sizeSync(): number;
+    start(wait?: number): void;
+    stop(): void;
     unsetAvatar(callback?: BooleanCallback): void;
     unsetAvatarSync(): boolean;
   }
