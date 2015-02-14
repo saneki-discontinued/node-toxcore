@@ -1,6 +1,10 @@
 Changelog
 =========
 
+v0.0.9
+------
+- Support for ToxEncryptSave functions.
+
 v0.0.8
 ------
 - Sync/async groupchat title functions.
