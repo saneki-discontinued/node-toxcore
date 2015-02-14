@@ -1,6 +1,10 @@
 Changelog
 =========
 
+v0.0.10
+-------
+- Tox#start(), Tox#stop(), Tox#isStarted() for internal interval.
+
 v0.0.9
 ------
 - Support for ToxEncryptSave functions.
