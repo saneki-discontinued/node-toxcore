@@ -304,20 +304,42 @@ describe('ToxEncryptSave', function() {
     });
 
     it('should encrypt and decrypt a Tox instance synchronously when no callbacks passed (if sync option enabled)',
-      function(done) {
+      function() {
       var passphrase = 'somePasswordYo',
           encData = encWithHandle.encryptedSave(passphrase);
       encWithHandle.encryptedLoad(encData, passphrase);
-      done();
+    });
+
+    it('should fail decrypting when given a different passphrase', function(done) {
+      encWithHandle.encryptedSave('neverUseMeAgain', function(err, encData) {
+        if(err) {
+          done(err);
+          return;
+        }
+
+        encWithHandle.encryptedLoad(encData, 'wrongPassword', function(err) {
+          err.should.exist;
+          done();
+        });
+      });
     });
   });
 
   describe('#encryptedSaveSync(), #encryptedLoadSync()', function() {
-    it('should encrypt and decrypt a Tox instance synchronously', function(done) {
+    it('should encrypt and decrypt a Tox instance', function() {
       var passphrase = 'somePasswordYo',
-          encData = encWithHandle.encryptedSave(passphrase);
-      encWithHandle.encryptedLoad(encData, passphrase);
-      done();
+          encData = encWithHandle.encryptedSaveSync(passphrase);
+      encWithHandle.encryptedLoadSync(encData, passphrase);
+    });
+
+    it('should fail decrypting when given a different passphrase', function() {
+      var encData = encWithHandle.encryptedSaveSync('neverUseMeAgain');
+      try {
+        encData.encryptedLoadSync(encData, 'wrongPassword');
+        should.fail('encryptedLoadSync should have thrown an error');
+      } catch(err) {
+        err.should.exist;
+      }
     });
   });
 });
