@@ -1,0 +1,10 @@
+{
+  "name": "toxcore-examples",
+  "version": "0.0.0",
+  "description": "node-toxcore examples",
+  "dependencies": {
+    "async": "^0.9.0",
+    "bluebird": "^2.9.9",
+    "toxcore": "0.0.10"
+  }
+}
