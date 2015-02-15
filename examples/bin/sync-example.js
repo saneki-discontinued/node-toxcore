@@ -34,6 +34,18 @@ tox.on('friendMessage', function(evt) {
   console.log('Echoed message from friend ' + evt.friend() + ': ' + evt.message());
 });
 
+// Setup groupInvite callback to auto-accept group invites
+tox.on('groupInvite', function(evt) {
+  var groupnum;
+  if(evt.isChatText()) {
+    groupnum = tox.joinGroupchatSync(evt.friend(), evt.data());
+    console.log('Joined text groupchat ' + groupnum);
+  } else if(evt.isChatAV()) {
+    groupnum = tox.getAV().joinGroupchatSync(evt.friend(), evt.data());
+    console.log('Joined audio/video groupchat ' + groupnum);
+  };
+});
+
 // Bootstrap from nodes
 nodes.forEach(function(node) {
   tox.bootstrapFromAddressSync(node.address, node.port, node.key);
