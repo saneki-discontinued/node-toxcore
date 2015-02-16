@@ -4,6 +4,9 @@
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
 
 declare module 'toxcore' {
+  import events = require('events');
+  import EventEmitter = events.EventEmitter;
+
   interface ToxConstructorOptions {
     path?: string;
   }
@@ -78,8 +81,10 @@ declare module 'toxcore' {
     getAddressSync(): Buffer;
     getAddressHex(callback?: StringCallback): void;
     getAddressHexSync(): string;
+    getAV(): any; // CHANGE ME LATER
     getDoInterval(callback?: NumberCallback): void;
     getDoIntervalSync(): number;
+    getEmitter(): EventEmitter;
     getFileDataRemaining(friendnum: number, filenum: number, sendReceive: number, callback?: NumberCallback): void;
     getFileDataRemainingSync(friendnum: number, filenum: number, sendReceive: number): number;
     getFileDataSize(friendnum: number, callback?: NumberCallback): void;
@@ -108,6 +113,7 @@ declare module 'toxcore' {
     getGroupchatPeerNamesSync(groupnum: number): string[];
     getGroupchatTitle(groupnum: number, callback?: StringCallback): void;
     getGroupchatTitleSync(groupnum: number): string;
+    getHandle(): any;
     getKeys(includePriv: boolean, callback?: ToxKeysCallback): void;
     getKeysSync(includePriv: boolean): Buffer[];
     getName(callback?: StringCallback): void;
@@ -145,6 +151,7 @@ declare module 'toxcore' {
     newFileSender(friendnum: number, filesize: number, filename: string, callback?: NumberCallback): void;
     newFileSenderSync(friendnum: number, filesize: number, filename: string): number;
     on(name: string, callback?: Function): void;
+    off(name: string, callback: Function): void;
     peernumberIsOurs(groupnum: number, peernum: number, callback?: BooleanCallback): void;
     peernumberIsOursSync(groupnum: number, peernum: number): boolean;
     requestAvatarData(friendnum: number, callback?: BooleanCallback): void;
