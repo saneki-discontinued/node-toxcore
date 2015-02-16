@@ -9,37 +9,18 @@ var toxcore = require('toxcore');
 Promise.promisifyAll(async);
 Promise.promisifyAll(toxcore);
 
-/**
- * node-toxcore example with bluebird promises.
- * @class
- */
-var PromisesExample = function() {
-  var tox = this._tox = new toxcore.Tox();
+var tox = new toxcore.Tox();
 
-  var initSelf = PromisesExample.prototype._initSelf.bind(this),
-      initCallbacks = PromisesExample.prototype._initCallbacks.bind(this),
-      bootstrap = PromisesExample.prototype.bootstrap.bind(this);
-
-  async.parallel([
-    initSelf,      // Initialize name, status message
-    initCallbacks, // Initialize callbacks
-    bootstrap      // Bootstrap
-  ], function() {
-    // When everything is ready, print out our tox address
-    tox.getAddressHexAsync().then(function(addr) {
-      console.log('------------------------');
-      console.log('Tox address: ' + addr);
-    });
-  });
+var groupchats = {
+  'text': -1,
+  'av': -1
 };
 
 /**
  * Bootstrap tox via hardcoded nodes.
  * For more nodes, see: https://wiki.tox.im/Nodes
  */
-PromisesExample.prototype.bootstrap = function(callback) {
-  var tox = this.getTox();
-
+var bootstrap = function(callback) {
   // Define nodes to bootstrap from
   var nodes = [
     { maintainer: 'Impyy',
@@ -68,20 +49,10 @@ PromisesExample.prototype.bootstrap = function(callback) {
 };
 
 /**
- * Get our Tox instance.
- * @return {toxcore.Tox} Tox instance
- */
-PromisesExample.prototype.getTox = function() {
-  return this._tox;
-};
-
-/**
  * Initialize ourself. Sets name and status message.
  * @private
  */
-PromisesExample.prototype._initSelf = function(callback) {
-  var tox = this.getTox();
-
+var initSelf = function(callback) {
   // Asynchronously set our name and status message using promises
   Promise.join(
     tox.setNameAsync('Bluebird'),
@@ -90,7 +61,7 @@ PromisesExample.prototype._initSelf = function(callback) {
     console.log('Successfully set name and status message!');
     callback();
   }).catch(function(err) {
-    console.error('Error (_initSelf):', err);
+    console.error('Error (initSelf):', err);
     callback(err);
   });
 };
@@ -98,9 +69,7 @@ PromisesExample.prototype._initSelf = function(callback) {
 /**
  * Initialize our callbacks, listening for friend requests and messages.
  */
-PromisesExample.prototype._initCallbacks = function(callback) {
-  var tox = this.getTox();
-
+var initCallbacks = function(callback) {
   tox.on('friendRequest', function(evt) {
     console.log('Accepting friend request from ' + evt.publicKeyHex());
     // Automatically accept the request
@@ -121,7 +90,48 @@ PromisesExample.prototype._initCallbacks = function(callback) {
     });
   });
 
+  // Setup friendMessage callback to listen for groupchat invite requests
+  tox.on('friendMessage', function(evt) {
+    if(evt.message() === 'invite text') {
+      tox.inviteAsync(evt.friend(), groupchats['text']).then(function() {
+        console.log('Invited ' + evt.friend() + ' to the text groupchat');
+      });
+    } else if(evt.message() === 'invite av') {
+      tox.inviteAsync(evt.friend(), groupchats['av']).then(function() {
+        console.log('Invited ' + evt.friend() + ' to the audio/video groupchat');
+      });
+    }
+  });
+
   callback();
 };
 
-(new PromisesExample()).getTox().start();
+/**
+ * Initialize the groupchats, and call the callback when finished.
+ */
+var initGroupchats = function(callback) {
+  async.parallelAsync([
+    tox.addGroupchat.bind(tox),
+    tox.getAV().addGroupchat.bind(tox.getAV())
+  ]).then(function(results) {
+    groupchats['text'] = results[0];
+    groupchats['av'] = results[1];
+  }).finally(callback);
+};
+
+// Initialize everything + bootstrap from nodes, then when everything
+// is ready print our address and start
+async.parallel([
+  initSelf,       // Initialize name, status message
+  initCallbacks,  // Initialize callbacks
+  initGroupchats, // Initialize groupchats
+  bootstrap       // Bootstrap
+], function() {
+  // When everything is ready, print out our tox address
+  tox.getAddressHexAsync().then(function(addr) {
+    console.log('------------------------');
+    console.log('Tox address: ' + addr);
+  });
+
+  tox.start(); // Start
+});
