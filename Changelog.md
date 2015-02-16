@@ -1,6 +1,10 @@
 Changelog
 =========
 
+v0.0.13
+-------
+- GroupTitleEvent works and doesn't break everything.
+
 v0.0.12
 -------
 - Added async/sync ToxAV#addGroupchat() functions.
