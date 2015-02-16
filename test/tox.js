@@ -282,4 +282,20 @@ describe('Tox', function() {
       tox.sizeSync().should.be.above(0);
     });
   });
+
+  describe('#getAV()', function() {
+    it('should return a ToxAV object if Tox constructed with no parameters', function() {
+      should.exist(tox.getAV());
+    });
+
+    it('should return undefined if Tox constructed with opts { av: false }', function() {
+      var toxNoAV = new toxcore.Tox({ av: false });
+      should.not.exist(toxNoAV.getAV());
+    });
+
+    it('should return a ToxAV object if Tox constructed with opts { av: true }', function() {
+      var toxWithAV = new toxcore.Tox({ av: true });
+      should.exist(toxWithAV.getAV());
+    });
+  });
 });
