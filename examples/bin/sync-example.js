@@ -17,6 +17,12 @@ var nodes = [
     key: '04119E835DF3E78BACF0F84235B300546AF8B936F035185E2A8E9E0A67C8924F' }
 ];
 
+// Groupchat ids, will be updated later
+var groupchats = {
+  'text': -1,
+  'av': -1
+};
+
 // Set our name, status message, user status
 tox.setNameSync('Tox Sync Example');
 tox.setStatusMessageSync('Whee!');
@@ -32,6 +38,17 @@ tox.on('friendRequest', function(evt) {
 tox.on('friendMessage', function(evt) {
   tox.sendMessageSync(evt.message(), evt.friend());
   console.log('Echoed message from friend ' + evt.friend() + ': ' + evt.message());
+});
+
+// Setup another friendMessage callback to handle groupchat invite requests
+tox.on('friendMessage', function(evt) {
+  if(evt.message() === 'invite text') {
+    // Invite to text groupchat
+    tox.inviteSync(evt.friend(), groupchats['text']);
+  } else if(evt.message() === 'invite av') {
+    // Invite to a/v groupchat
+    tox.inviteSync(evt.friend(), groupchats['av']);
+  }
 });
 
 // Setup groupInvite callback to auto-accept group invites
@@ -50,6 +67,10 @@ tox.on('groupInvite', function(evt) {
 nodes.forEach(function(node) {
   tox.bootstrapFromAddressSync(node.address, node.port, node.key);
 });
+
+// Create a new text groupchat and a new AV groupchat
+groupchats['text'] = tox.addGroupchatSync();
+groupchats['av'] = tox.getAV().addGroupchatSync();
 
 // Print our tox address
 console.log('Address: ' + tox.getAddressHexSync());
