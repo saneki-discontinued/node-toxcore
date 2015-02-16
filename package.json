@@ -1,6 +1,6 @@
 {
   "name": "toxcore",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Node bindings for libtoxcore",
   "keywords": ["im", "libtoxcore", "node-toxcore", "skype", "tox", "toxcore"],
   "license": "WTFPL",

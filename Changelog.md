@@ -1,6 +1,15 @@
 Changelog
 =========
 
+v0.0.11
+-------
+- Added `type` field to events.
+- Added more emitter methods: Tox#off(), Tox#getEmitter().
+- Modified GroupInviteEvent: #type() -> #chatType(), added a few helper methods.
+- Started on ToxAV, creating a Tox object will try to create an internal ToxAV
+  object unless told not to, can be gotten by Tox#getAV().
+- Tox#setName() fix.
+
 v0.0.10
 -------
 - Tox#start(), Tox#stop(), Tox#isStarted() for internal interval.
