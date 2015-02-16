@@ -1,6 +1,10 @@
 Changelog
 =========
 
+v0.0.12
+-------
+- Added async/sync ToxAV#addGroupchat() functions.
+
 v0.0.11
 -------
 - Added `type` field to events.
