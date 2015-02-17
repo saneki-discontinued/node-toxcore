@@ -1,6 +1,12 @@
 Changelog
 =========
 
+v0.0.14
+-------
+- Allow Tox 'av' option to take a boolean or an object to be passed as ToxAV's
+  opts parameter.
+- Removed 'Core' and 'createCoreLibrary' from main exports.
+
 v0.0.13
 -------
 - GroupTitleEvent works and doesn't break everything.
