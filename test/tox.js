@@ -20,7 +20,7 @@ describe('Tox', function() {
   describe('#checkHandle()', function() {
     it('should return an error in callback when no handle', function(done) {
       toxWithoutHandle.checkHandle(function(err) {
-        err.should.exist;
+        should.exist(err);
         done();
       });
     });
@@ -32,7 +32,7 @@ describe('Tox', function() {
         toxWithoutHandle.checkHandleSync();
         should.fail('checkHandleSync should have thrown an error');
       } catch(e) {
-        e.should.exist;
+        should.exist(e);
       }
     });
 
@@ -254,7 +254,7 @@ describe('Tox', function() {
     it('should clear handle after killing', function(done) {
       var temp = new toxcore.Tox();
       temp.kill(function(err) {
-        temp.hasHandle().should.not.exist;
+        temp.hasHandle().should.be.false;
         done(err);
       });
     });
@@ -264,7 +264,7 @@ describe('Tox', function() {
     it('should clear handle after killing', function() {
       var temp = new toxcore.Tox();
       temp.killSync();
-      temp.hasHandle().should.not.exist;
+      temp.hasHandle().should.be.false;
     });
   });
 

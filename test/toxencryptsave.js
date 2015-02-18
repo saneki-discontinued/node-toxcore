@@ -71,7 +71,7 @@ describe('ToxEncryptSave', function() {
   describe('#getEncryptedSize()', function() {
     it('should return an Error in callback if no handle', function(done) {
       enc.getEncryptedSize(function(err, res) {
-        err.should.exist;
+        should.exist(err);
         done();
       });
     });
@@ -94,7 +94,7 @@ describe('ToxEncryptSave', function() {
         enc.getEncryptedSizeSync();
         should.fail('getEncryptedSizeSync should have thrown an error');
       } catch(e) {
-        e.should.exist;
+        should.exist(e);
       }
     });
 
@@ -227,7 +227,7 @@ describe('ToxEncryptSave', function() {
           return;
         }
 
-        data.should.exist;
+        should.exist(data);
 
         encWithHandle.encryptedKeyLoad(data, key, function(err) {
           done(err);
@@ -271,7 +271,7 @@ describe('ToxEncryptSave', function() {
       var passphrase = 'somePassword',
           data = new Buffer(100);
       var encData = enc.passEncrypt(data, passphrase);
-      encData.should.exist;
+      should.exist(encData);
       var decData = enc.passDecrypt(encData, passphrase);
       should(decData.equals(data)).be.ok;
     });
@@ -282,7 +282,7 @@ describe('ToxEncryptSave', function() {
       var passphrase = 'somePassword',
           data = new Buffer(100);
       var encData = enc.passEncryptSync(data, passphrase);
-      encData.should.exist;
+      should.exist(encData);
       var decData = enc.passDecryptSync(encData, passphrase);
       should(decData.equals(data)).be.ok;
     });
@@ -318,7 +318,7 @@ describe('ToxEncryptSave', function() {
         }
 
         encWithHandle.encryptedLoad(encData, 'wrongPassword', function(err) {
-          err.should.exist;
+          should.exist(err);
           done();
         });
       });
@@ -338,7 +338,7 @@ describe('ToxEncryptSave', function() {
         encData.encryptedLoadSync(encData, 'wrongPassword');
         should.fail('encryptedLoadSync should have thrown an error');
       } catch(err) {
-        err.should.exist;
+        should.exist(err);
       }
     });
   });
