@@ -1,4 +1,4 @@
-// Type definitions for toxcore 0.0.14
+// Type definitions for toxcore 0.0.15
 // Project: https://github.com/saneki/node-toxcore
 // Definitions by: saneki <https://github.com/saneki>
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
@@ -71,10 +71,10 @@ declare module 'toxcore' {
     bootstrapFromAddressSync(address: string, port: number, publicKey: Buffer): void;
     countFriendList(callback?: NumberCallback): void;
     countFriendListSync(): number;
-    deleteFriend(friendnum: number, callback?: BooleanCallback): void;
-    deleteFriendSync(friendnum: number): boolean;
-    deleteGroupchat(groupnum: number, callback?: BooleanCallback): void;
-    deleteGroupchatSync(groupnum: number): boolean;
+    deleteFriend(friendnum: number, callback?: ErrorCallback): void;
+    deleteFriendSync(friendnum: number): void;
+    deleteGroupchat(groupnum: number, callback?: ErrorCallback): void;
+    deleteGroupchatSync(groupnum: number): void;
     do(callback?: ErrorCallback): void;
     doSync(): void;
     getAddress(callback?: BufferCallback): void;
@@ -143,8 +143,8 @@ declare module 'toxcore' {
     joinGroupchatSync(friendnum: number, data: Buffer): number;
     kill(callback?: ErrorCallback): void;
     killSync(): void;
-    invite(friendnum: number, groupnum: number, callback?: BooleanCallback): void;
-    inviteSync(friendnum: number, groupnum: number): boolean;
+    invite(friendnum: number, groupnum: number, callback?: ErrorCallback): void;
+    inviteSync(friendnum: number, groupnum: number): void;
     load(buffer: Buffer, callback?: NumberCallback): void;
     loadSync(buffer: Buffer): number;
     loadFromFile(filepath: string, callback?: ErrorCallback): void;
@@ -154,10 +154,10 @@ declare module 'toxcore' {
     off(name: string, callback: Function): void;
     peernumberIsOurs(groupnum: number, peernum: number, callback?: BooleanCallback): void;
     peernumberIsOursSync(groupnum: number, peernum: number): boolean;
-    requestAvatarData(friendnum: number, callback?: BooleanCallback): void;
-    requestAvatarDataSync(friendnum: number): boolean;
-    requestAvatarInfo(friendnum: number, callback?: BooleanCallback): void;
-    requestAvatarInfoSync(friendnum: number): boolean;
+    requestAvatarData(friendnum: number, callback?: ErrorCallback): void;
+    requestAvatarDataSync(friendnum: number): void;
+    requestAvatarInfo(friendnum: number, callback?: ErrorCallback): void;
+    requestAvatarInfoSync(friendnum: number): void;
     save(callback?: BufferCallback): void;
     saveSync(): Buffer;
     saveToFile(filepath: string, callback?: ErrorCallback): void;
@@ -166,26 +166,26 @@ declare module 'toxcore' {
     sendFileData(friendnum: number, filenum: number, data: Buffer, callback?: ErrorCallback): void;
     sendFileDataSync(friendnum: number, filenum: number, data: Buffer): void;
     sendGroupchatAction(groupnum: number, action: string, callback?: ErrorCallback): void;
-    sendGroupchatActionSync(groupnum: number, action: string): boolean;
+    sendGroupchatActionSync(groupnum: number, action: string): void;
     sendGroupchatMessage(groupnum: number, message: string, callback?: ErrorCallback): void;
-    sendGroupchatMessageSync(groupnum: number, message: string): boolean;
+    sendGroupchatMessageSync(groupnum: number, message: string): void;
     sendMessage(message: string, friend: number, callback?: NumberCallback): void;
     sendMessageSync(message: string, friend: number): number;
-    setAvatar(format: number, buffer: Buffer, callback?: BooleanCallback): void;
-    setAvatarSync(format: number, buffer: Buffer): boolean;
+    setAvatar(format: number, buffer: Buffer, callback?: ErrorCallback): void;
+    setAvatarSync(format: number, buffer: Buffer): void;
     setGroupchatTitle(groupnum: number, title: string, callback?: ErrorCallback): void;
     setGroupchatTitleSync(groupnum: number, title: string): void;
-    setName(name: string, callback?: BooleanCallback): void;
-    setNameSync(name: string): boolean;
-    setStatusMessage(status: string, callback?: BooleanCallback): void;
-    setStatusMessageSync(status: string): boolean;
-    setUserStatus(status: number, callback?: BooleanCallback): void;
-    setUserStatusSync(status: number): boolean;
+    setName(name: string, callback?: ErrorCallback): void;
+    setNameSync(name: string): void;
+    setStatusMessage(status: string, callback?: ErrorCallback): void;
+    setStatusMessageSync(status: string): void;
+    setUserStatus(status: number, callback?: ErrorCallback): void;
+    setUserStatusSync(status: number): void;
     size(callback?: NumberCallback): void;
     sizeSync(): number;
     start(wait?: number): void;
     stop(): void;
-    unsetAvatar(callback?: BooleanCallback): void;
-    unsetAvatarSync(): boolean;
+    unsetAvatar(callback?: ErrorCallback): void;
+    unsetAvatarSync(): void;
   }
 }

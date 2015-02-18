@@ -1,6 +1,22 @@
 Changelog
 =========
 
+v0.0.15
+-------
+- Changed a lot of Tox methods to throw errors (or return them in callbacks) if
+  not successful, instead of returning a boolean value. Some methods, such as
+  Tox#getFriendNameSync(), still have the same successful return value, but now
+  throw an error if something unexpected happens. All affected methods:
+  Tox#deleteFriend(), Tox#deleteFriendSync(), Tox#deleteGroupchat(), Tox#deleteGroupchatSync(),
+  Tox#getFriendNameSync(), Tox#getFriendStatusMessageSync(), Tox#getNameSync(),
+  Tox#getStatusMessageSync(), Tox#invite(), Tox#inviteSync(), Tox#requestAvatarData(),
+  Tox#requestAvatarDataSync(), Tox#requestAvatarInfo(), Tox#requestAvatarInfoSync(),
+  Tox#sendGroupchatActionSync(), Tox#sendGroupchatMessageSync(), Tox#setAvatar(),
+  Tox#setAvatarSync(), Tox#setName(), Tox#setNameSync(), Tox#setStatusMessage(),
+  Tox#setStatusMessageSync(), Tox#setUserStatus(), Tox#setUserStatusSync(), Tox#unsetAvatar(),
+  Tox#unsetAvatarSync()
+- Removed console.log call in Tox#getGroupchatPeerNames()
+
 v0.0.14
 -------
 - Allow Tox 'av' option to take a boolean or an object to be passed as ToxAV's
