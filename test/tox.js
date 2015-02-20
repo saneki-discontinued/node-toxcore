@@ -17,6 +17,48 @@ describe('Tox', function() {
 
   var abcHashed = 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad';
 
+  describe('groupchat tests', function() {
+    describe('#addGroupchat(), #deleteGroupchat()', function() {
+      it('should add a new groupchat', function(done) {
+        // Add groupchat
+        tox.addGroupchat(function(err, groupnum) {
+          if(err) {
+            done(err);
+            return;
+          }
+
+          (groupnum >= 0).should.be.true;
+
+          // Delete groupchat
+          tox.deleteGroupchat(groupnum, function(err) {
+            done(err);
+          });
+        });
+      });
+
+      it('should error if deleting non-existant groupchat', function(done) {
+        tox.deleteGroupchat(99999, function(err) {
+          should.exist(err);
+          done();
+        });
+      });
+    });
+
+    describe('#addGroupchatSync(), #deleteGroupchatSync()', function() {
+      it('should add a new groupchat', function() {
+        var groupnum = tox.addGroupchatSync();
+        (groupnum >= 0).should.be.true;
+        tox.deleteGroupchatSync(groupnum);
+      });
+
+      it('should throw error if deleting a non-existant groupchat', function() {
+        (function() {
+          tox.deleteGroupchatSync(99999);
+        }).should.throw();
+      });
+    });
+  });
+
   describe('#checkHandle()', function() {
     it('should return an error in callback when no handle', function(done) {
       toxWithoutHandle.checkHandle(function(err) {
