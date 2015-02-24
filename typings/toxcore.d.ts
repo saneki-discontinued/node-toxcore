@@ -1,4 +1,4 @@
-// Type definitions for toxcore 0.0.15
+// Type definitions for toxcore 0.0.16
 // Project: https://github.com/saneki/node-toxcore
 // Definitions by: saneki <https://github.com/saneki>
 // Definitions: https://github.com/borisyankov/DefinitelyTyped

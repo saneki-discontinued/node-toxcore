@@ -1,6 +1,16 @@
 Changelog
 =========
 
+v0.0.16
+-------
+- Modified parameter ordering of Tox#sendMessage(), Tox#sendMessageSync(): friend number then
+  message instead of the other way around.
+- Fixed null-term issues with a few functions: Tox#bootstrapFromAddress(),
+  Tox#bootstrapFromAddressSync(), Tox#addTCPRelay(), Tox#addTCPRelaySync().
+- Fixed Tox#deleteGroupchatSync().
+- No more TOX_* variables polluting the global scope.
+- Changed some "private" methods/member variables in Tox to be prefixed with _.
+
 v0.0.15
 -------
 - Changed a lot of Tox methods to throw errors (or return them in callbacks) if
