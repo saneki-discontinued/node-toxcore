@@ -169,8 +169,8 @@ declare module 'toxcore' {
     sendGroupchatActionSync(groupnum: number, action: string): void;
     sendGroupchatMessage(groupnum: number, message: string, callback?: ErrorCallback): void;
     sendGroupchatMessageSync(groupnum: number, message: string): void;
-    sendMessage(message: string, friend: number, callback?: NumberCallback): void;
-    sendMessageSync(message: string, friend: number): number;
+    sendMessage(friendnum: number, message: string, callback?: NumberCallback): void;
+    sendMessageSync(friendnum: number, message: string): number;
     setAvatar(format: number, buffer: Buffer, callback?: ErrorCallback): void;
     setAvatarSync(format: number, buffer: Buffer): void;
     setGroupchatTitle(groupnum: number, title: string, callback?: ErrorCallback): void;

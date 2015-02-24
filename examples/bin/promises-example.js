@@ -83,7 +83,7 @@ var initCallbacks = function(callback) {
   tox.on('friendMessage', function(evt) {
     console.log('Message from friend ' + evt.friend() + ': ' + evt.message());
     // Echo message back to friend
-    tox.sendMessageAsync(evt.message(), evt.friend()).then(function(receipt) {
+    tox.sendMessageAsync(evt.friend(), evt.message()).then(function(receipt) {
       console.log('Echoed message back to friend, received receipt ' + receipt);
     }).catch(function(err) {
       console.error('Couldn\'t echo message back to friend:', err);

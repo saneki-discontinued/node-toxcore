@@ -36,7 +36,7 @@ tox.on('friendRequest', function(evt) {
 
 // Setup friendMessage callback to echo messages
 tox.on('friendMessage', function(evt) {
-  tox.sendMessageSync(evt.message(), evt.friend());
+  tox.sendMessageSync(evt.friend(), evt.message());
   console.log('Echoed message from friend ' + evt.friend() + ': ' + evt.message());
 });
 
