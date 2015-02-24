@@ -1,4 +1,4 @@
-node-toxcore [![Build Status](https://secure.travis-ci.org/saneki/node-toxcore.png)](http://travis-ci.org/saneki/node-toxcore)
+node-toxcore [![Build Status](https://secure.travis-ci.org/saneki/node-toxcore.png)](http://travis-ci.org/saneki/node-toxcore) [![NPM Version](https://img.shields.io/npm/v/toxcore.svg)](https://www.npmjs.org/package/toxcore)
 ============
 
 [![NPM](https://nodei.co/npm/toxcore.png)](https://nodei.co/npm/toxcore/)
