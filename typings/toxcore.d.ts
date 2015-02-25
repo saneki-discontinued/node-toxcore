@@ -161,6 +161,8 @@ declare module 'toxcore' {
     save(callback?: BufferCallback): void;
     saveSync(): Buffer;
     saveToFile(filepath: string, callback?: ErrorCallback): void;
+    sendAction(friendnum: number, action: string, callback?: NumberCallback): void;
+    sendActionSync(friendnum: number, action: string): number;
     sendFileControl(friendnum: number, sendReceive: number, filenum: number, messageId: number, data: Buffer, callback?: ErrorCallback): void;
     sendFileControlSync(friendnum: number, sendReceive: number, filenum: number, messageId: number, data: Buffer): void;
     sendFileData(friendnum: number, filenum: number, data: Buffer, callback?: ErrorCallback): void;
