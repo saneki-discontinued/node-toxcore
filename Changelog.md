@@ -1,6 +1,10 @@
 Changelog
 =========
 
+v0.0.17
+-------
+- Added Tox#sendAction(), Tox#sendActionSync().
+
 v0.0.16
 -------
 - Modified parameter ordering of Tox#sendMessage(), Tox#sendMessageSync(): friend number then
