@@ -59,6 +59,15 @@ describe('Tox', function() {
     });
   });
 
+  describe('constructing with options', function() {
+    // Todo: add a lot of tests
+    it('shouldn\'t break when using ipv6, udp, proxy (string) options', function() {
+      var toxWithOpts = new toxcore.Tox({
+        ipv6: true, udp: true, proxy: 'socks://127.0.0.1:9000'
+      });
+    });
+  });
+
   describe('#checkHandle()', function() {
     it('should return an error in callback when no handle', function(done) {
       toxWithoutHandle.checkHandle(function(err) {
