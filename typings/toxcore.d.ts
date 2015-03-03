@@ -89,6 +89,8 @@ declare module 'toxcore' {
     getFileDataRemainingSync(friendnum: number, filenum: number, sendReceive: number): number;
     getFileDataSize(friendnum: number, callback?: NumberCallback): void;
     getFileDataSizeSync(friendnum: number): number;
+    getFriendConnectionStatus(friendnum: number, callback?: BooleanCallback): void;
+    getFriendConnectionStatusSync(friendnum: number): boolean;
     getFriendLastOnline(friendnum: number, callback?: NumberCallback): void;
     getFriendLastOnlineSync(friendnum: number): number;
     getFriendList(callback?: NumberArrayCallback): void;
