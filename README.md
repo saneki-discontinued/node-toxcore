@@ -46,6 +46,9 @@ tox.on('friendRequest', function(e) {
   console.log('Friend request from: ' + e.publicKeyHex());
 });
 
+// Print out your tox address so others can add it
+console.log('Address: ' + tox.getAddressHexSync());
+
 // Start!
 tox.start();
 ```
