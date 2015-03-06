@@ -113,6 +113,10 @@ declare module 'toxcore' {
     getGroupchatPeerCountSync(groupnum: number): number;
     getGroupchatPeerNames(groupnum: number, callback?: StringArrayCallback): void;
     getGroupchatPeerNamesSync(groupnum: number): string[];
+    getGroupchatPeerPublicKey(groupnum: number, peernum: number, callback?: BufferCallback): void;
+    getGroupchatPeerPublicKeySync(groupnum: number, peernum: number): Buffer;
+    getGroupchatPeerPublicKeyHex(groupnum: number, peernum: number, callback?: StringCallback): void;
+    getGroupchatPeerPublicKeyHexSync(groupnum: number, peernum: number): string;
     getGroupchatTitle(groupnum: number, callback?: StringCallback): void;
     getGroupchatTitleSync(groupnum: number): string;
     getHandle(): any;
@@ -150,6 +154,7 @@ declare module 'toxcore' {
     load(buffer: Buffer, callback?: NumberCallback): void;
     loadSync(buffer: Buffer): number;
     loadFromFile(filepath: string, callback?: ErrorCallback): void;
+    loadFromFileSync(filepath: string): void;
     newFileSender(friendnum: number, filesize: number, filename: string, callback?: NumberCallback): void;
     newFileSenderSync(friendnum: number, filesize: number, filename: string): number;
     on(name: string, callback?: Function): void;
@@ -163,6 +168,7 @@ declare module 'toxcore' {
     save(callback?: BufferCallback): void;
     saveSync(): Buffer;
     saveToFile(filepath: string, callback?: ErrorCallback): void;
+    saveToFileSync(filepath: string): void;
     sendAction(friendnum: number, action: string, callback?: NumberCallback): void;
     sendActionSync(friendnum: number, action: string): number;
     sendFileControl(friendnum: number, sendReceive: number, filenum: number, messageId: number, data: Buffer, callback?: ErrorCallback): void;
