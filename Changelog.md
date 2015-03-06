@@ -1,6 +1,16 @@
 Changelog
 =========
 
+v0.0.18
+-------
+- Added Tox#getFriendConnectionStatus(), Tox#getFriendConnectionStatusSync(),
+  Tox#getGroupchatPeerPublicKey(), Tox#getGroupchatPeerPublicKeySync(),
+  Tox#getGroupchatPeerPublicKeyHex(), Tox#getGroupchatPeerPublicKeyHexSync().
+  (thanks [mensinda])
+- Added Tox#loadFromFileSync(), Tox#saveToFileSync().
+- Fixed Tox#setUserStatus(). (thanks [Arvius])
+- Fixed GroupActionEvent#peer(), GroupMessageEvent#peer(). (thanks [mensinda])
+
 v0.0.17
 -------
 - Added Tox#sendAction(), Tox#sendActionSync().
@@ -102,3 +112,6 @@ v0.0.1
   although not all.
 - Support for most events in `tox.h`.
 - Some mostly-untested `toxdns.h` stuff.
+
+[Arvius]:https://github.com/Arvius
+[mensinda]:https://github.com/mensinda
