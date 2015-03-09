@@ -11,6 +11,10 @@ declare module 'toxcore' {
     path?: string;
   }
 
+  interface ToxEncryptSaveConstructorOptions {
+    path?: string;
+  }
+
   interface ErrorCallback {
     (err?: Error): void;
   }
@@ -197,5 +201,41 @@ declare module 'toxcore' {
     stop(): void;
     unsetAvatar(callback?: ErrorCallback): void;
     unsetAvatarSync(): void;
+  }
+
+  export class ToxEncryptSave {
+    new(tox: Tox, opts?: ToxEncryptSaveConstructorOptions);
+    getEncryptionExtraLength(callback?: NumberCallback): void;
+    getEncryptionExtraLengthSync(): number;
+    getKeyLength(callback?: NumberCallback): void;
+    getKeyLengthSync(): number;
+    getSaltLength(callback?: NumberCallback): void;
+    getSaltLengthSync(): number;
+    getEncryptedSize(callback?: NumberCallback): void;
+    getEncryptedSizeSync(): number;
+    passEncrypt(data: Buffer, passphrase: string, callback?: BufferCallback): void;
+    passEncryptSync(data: Buffer, passphrase: string): Buffer;
+    passDecrypt(data: Buffer, passphrase: string, callback?: BufferCallback): void;
+    passDecryptSync(data: Buffer, passphrase: string): Buffer;
+    encryptedLoad(data: Buffer, passphrase: string, callback?: ErrorCallback): void;
+    encryptedLoadSync(data: Buffer, passphrase: string): void;
+    encryptedSave(passphrase: string, callback?: BufferCallback): void;
+    encryptedSaveSync(passphrase: string): Buffer;
+    deriveKeyFromPass(passphrase: string, callback?: BufferCallback): void;
+    deriveKeyFromPassSync(passphrase: string): Buffer;
+    deriveKeyWithSalt(passphrase: string, salt: Buffer, callback?: BufferCallback): void;
+    deriveKeyWithSaltSync(passphrase: string, salt: Buffer): Buffer;
+    getSalt(data: Buffer, callback?: BufferCallback): void;
+    getSaltSync(data: Buffer): Buffer;
+    passKeyEncrypt(data: Buffer, key: Buffer, callback?: BufferCallback): void;
+    passKeyEncryptSync(data: Buffer, key: Buffer): Buffer;
+    passKeyDecrypt(data: Buffer, key: Buffer, callback?: BufferCallback): void;
+    passKeyDecryptSync(data: Buffer, key: Buffer): Buffer;
+    encryptedKeySave(key: Buffer, callback?: BufferCallback): void;
+    encryptedKeySaveSync(key: Buffer): Buffer;
+    encryptedKeyLoad(data: Buffer, key: Buffer, callback?: ErrorCallback): void;
+    encryptedKeyLoadSync(data: Buffer, key: Buffer): void;
+    isDataEncrypted(data: Buffer, callback?: BooleanCallback): void;
+    isDataEncryptedSync(data: Buffer): boolean;
   }
 }
