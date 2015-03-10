@@ -11,6 +11,15 @@ declare module 'toxcore' {
     path?: string;
   }
 
+  interface ToxAVConstructorOptions {
+    path?: string;
+  }
+
+  interface ToxDnsConstructorOptions {
+    path?: string;
+    key?: Buffer; // Or string?
+  }
+
   interface ToxEncryptSaveConstructorOptions {
     path?: string;
   }
@@ -201,6 +210,23 @@ declare module 'toxcore' {
     stop(): void;
     unsetAvatar(callback?: ErrorCallback): void;
     unsetAvatarSync(): void;
+  }
+
+  export class ToxAV {
+    new(tox: Tox, opts?: ToxAVConstructorOptions);
+    getTox(): Tox;
+    addGroupchat(callback?: NumberCallback): void;
+    addGroupchatSync(): number;
+    joinGroupchat(friendnum: number, data: Buffer, callback?: NumberCallback): void;
+    joinGroupchatSync(friendnum: number, data: Buffer): number;
+  }
+
+  export class ToxDns {
+    new(opts?: ToxDnsConstructorOptions);
+    kill(callback?: ErrorCallback): void;
+    killSync(): void;
+    generateString(name: string, callback?: Function): void; // Todo: fix
+    decrypt(record: string, requestId: number, callback?: BufferCallback): void;
   }
 
   export class ToxEncryptSave {
