@@ -264,4 +264,26 @@ declare module 'toxcore' {
     isDataEncrypted(data: Buffer, callback?: BooleanCallback): void;
     isDataEncryptedSync(data: Buffer): boolean;
   }
+
+  // ------
+  // NewApi
+  // ------
+  // @todo: Greatly improve this...
+
+  export class NewApiTox {
+    new();
+    bootstrapSync(address: string, port: number, publicKey: Buffer): void;
+    bootstrapSync(address: string, port: number, publicKey: string): void;
+    isStarted(): boolean;
+    kill(callback?: ErrorCallback): void;
+    killSync(): void;
+    start(wait?: number): void;
+    stop(): void;
+  }
+
+  export interface NewApi {
+    Tox: NewApiTox
+  }
+
+  export var newApi: NewApi;
 }
