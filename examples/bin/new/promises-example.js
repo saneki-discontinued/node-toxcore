@@ -24,7 +24,7 @@ var bootstrap = function(callback) {
       key: '788236D34978D1D5BD822F0A5BEBD2C53C64CC31CD3149350EE27D4D9A2F9B6B' },
     { maintainer: 'sonOfRa',
       address: '144.76.60.215',
-      port: 0,
+      port: 33445,
       key: '04119E835DF3E78BACF0F84235B300546AF8B936F035185E2A8E9E0A67C8924F' }
   ];
 
