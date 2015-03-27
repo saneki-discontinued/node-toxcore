@@ -2,6 +2,7 @@ var assert = require('assert');
 var should = require('should');
 var path = require('path');
 var Tox = require(path.join(__dirname, '..', '..', 'lib', 'new', 'tox'));
+var consts = require(path.join(__dirname, '..', '..', 'lib', 'new', 'consts'));
 
 describe('Tox', function() {
   var tox = new Tox();
@@ -79,6 +80,19 @@ describe('Tox', function() {
   describe('#isTcp()', function() {
     it('should return false if not a tcp relay', function() {
       tox.isTcp().should.be.false;
+    });
+  });
+
+  describe('#getOptions()', function() {
+    it('should handle proxies', function() {
+      var prox1 = new Tox({ proxy: { type: 'http', address: '12.34.56.92', port: 9411 } }),
+          opts1 = prox1.getOptions();
+      opts1.proxy_type.should.equal(consts.TOX_PROXY_TYPE_HTTP);
+      // @todo: Fix
+      // opts1.proxy_address.toString().should.equal('12.34.56.92');
+      opts1.proxy_port.should.equal(9411);
+
+      prox1.free();
     });
   });
 });
