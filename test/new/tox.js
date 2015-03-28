@@ -88,10 +88,8 @@ describe('Tox', function() {
       var prox1 = new Tox({ proxy: { type: 'http', address: '12.34.56.92', port: 9411 } }),
           opts1 = prox1.getOptions();
       opts1.proxy_type.should.equal(consts.TOX_PROXY_TYPE_HTTP);
-      // @todo: Fix
-      // opts1.proxy_address.toString().should.equal('12.34.56.92');
+      opts1.proxy_address.should.equal('12.34.56.92');
       opts1.proxy_port.should.equal(9411);
-
       prox1.free();
     });
   });
