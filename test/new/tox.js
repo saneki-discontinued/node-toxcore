@@ -4,6 +4,7 @@ var path = require('path');
 var Tox = require(path.join(__dirname, '..', '..', 'lib', 'new', 'tox'));
 var consts = require(path.join(__dirname, '..', '..', 'lib', 'new', 'consts'));
 
+// @todo: Cleanup (kill tox instances afterwards)
 describe('Tox', function() {
   var tox = new Tox();
   tox.start();
@@ -17,6 +18,22 @@ describe('Tox', function() {
 
   var toxDead = new Tox();
   toxDead.free();
+
+  describe('#getAddress(), #getAddressSync()', function() {
+    it('should return a buffer of expected size', function() {
+      var addr = tox.getAddressSync();
+      addr.should.be.a.Buffer;
+      addr.length.should.equal(consts.TOX_FRIEND_ADDRESS_SIZE);
+    });
+
+    it('should return a buffer of expected size (async)', function(done) {
+      tox.getAddress(function(err, addr) {
+        addr.should.be.a.Buffer;
+        addr.length.should.equal(consts.TOX_FRIEND_ADDRESS_SIZE);
+        done(err);
+      });
+    });
+  });
 
   describe('#getUdpPort(), #getUdpPortSync()', function() {
     it('should return a Number with udp enabled by default', function() {
