@@ -15,6 +15,9 @@ describe('Tox', function() {
   var toxCustomPort = new Tox({ startPort: customPort, endPort: customPort });
   toxCustomPort.start();
 
+  var toxDead = new Tox();
+  toxDead.free();
+
   describe('#getUdpPort(), #getUdpPortSync()', function() {
     it('should return a Number with udp enabled by default', function() {
       var port = tox.getUdpPortSync();
@@ -48,6 +51,17 @@ describe('Tox', function() {
 
     it('should return a not-bound error if not listening on udp (async)', function(done) {
       toxNoUdp.getUdpPort(function(err, port) {
+        should.exist(err);
+        done();
+      });
+    });
+
+    it('should throw an error if no handle', function() {
+      (function() { toxDead.getUdpPortSync(); }).should.throw();
+    });
+
+    it('should return an error if no handle (async)', function(done) {
+      toxDead.getUdpPort(function(err, port) {
         should.exist(err);
         done();
       });
