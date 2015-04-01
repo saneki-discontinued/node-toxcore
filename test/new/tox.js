@@ -19,6 +19,8 @@ describe('Tox', function() {
   var toxDead = new Tox();
   toxDead.free();
 
+  var addressRegex = /^[0-9a-fA-F]{76}$/;
+
   describe('#getAddress(), #getAddressSync()', function() {
     it('should return a buffer of expected size', function() {
       var addr = tox.getAddressSync();
@@ -30,6 +32,20 @@ describe('Tox', function() {
       tox.getAddress(function(err, addr) {
         addr.should.be.a.Buffer;
         addr.length.should.equal(consts.TOX_FRIEND_ADDRESS_SIZE);
+        done(err);
+      });
+    });
+  });
+
+  describe('#getAddressHex(), #getAddressHexSync()', function() {
+    it('should return an address as a hex string', function() {
+      var addr = tox.getAddressHexSync();
+      addr.should.match(addressRegex);
+    });
+
+    it('should return an address as a hex string (async)', function(done) {
+      tox.getAddressHex(function(err, addr) {
+        addr.should.match(addressRegex);
         done(err);
       });
     });
