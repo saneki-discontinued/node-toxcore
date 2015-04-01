@@ -51,6 +51,25 @@ describe('Tox', function() {
     });
   });
 
+  describe('#setName(), #setNameSync(), #getName(), #getNameSync()', function() {
+    it('should set and get the name', function() {
+      var name = 'Hello world!';
+      tox.setNameSync(name);
+      tox.getNameSync().should.equal(name);
+    });
+
+    it('should set and get the name (async)', function(done) {
+      var name = 'Some name';
+      tox.setName(name, function(err) {
+        if(err) done(err);
+        tox.getName(function(err, newName) {
+          newName.should.equal(name);
+          done(err);
+        });
+      });
+    });
+  });
+
   describe('#getUdpPort(), #getUdpPortSync()', function() {
     it('should return a Number with udp enabled by default', function() {
       var port = tox.getUdpPortSync();
