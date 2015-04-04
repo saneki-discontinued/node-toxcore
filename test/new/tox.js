@@ -21,6 +21,16 @@ describe('Tox', function() {
 
   var addressRegex = /^[0-9a-fA-F]{76}$/;
 
+  var fakeAddresses = [
+    '7bd26c7867ef3a08f0010dc646845284a52f69cb9fded8a2635da3bfe0ba7a4f8facd97f24d6',
+    '18e8bba90991e22dc70d8e8c188c93c4d38d62d2ab4c6d5aa6758b9b34925a31b18e0e25019b'
+  ];
+
+  var fakePublicKeys = [
+    '94f44a6edbfc8ff1dc3ed3c460da046f4280a234edcbd7f11c023e43f4f0cd67',
+    '5a1cd1a18f4411de8267154b6d9ac3a93d98e8c6e682987803cc6057472c444c'
+  ];
+
   describe('#getAddress(), #getAddressSync()', function() {
     it('should return a buffer of expected size', function() {
       var addr = tox.getAddressSync();
@@ -104,6 +114,36 @@ describe('Tox', function() {
           newStatus.should.equal(status);
           done(err);
         });
+      });
+    });
+  });
+
+  describe('#addFriend(), #addFriendSync(), #addFriendNoRequest(), #addFriendNoRequestSync()', function() {
+    it('should add a friend from a hex string address', function() {
+      var addr = fakeAddresses[0],
+          friend = tox.addFriendSync(addr, 'Hi!');
+      should(friend).be.type('number');
+    });
+
+    it('should add a friend from a hex string address (async)', function(done) {
+      var addr = fakeAddresses[1];
+      tox.addFriend(addr, 'Hello', function(err, friend) {
+        should(friend).be.type('number');
+        done(err);
+      });
+    });
+
+    it('should add a friend from a hex string public key', function() {
+      var publicKey = fakePublicKeys[0],
+          friend = tox.addFriendNoRequestSync(publicKey);
+      should(friend).be.type('number');
+    });
+
+    it('should add a friend from a hex string public key (async)', function(done) {
+      var publicKey = fakePublicKeys[1];
+      tox.addFriendNoRequest(publicKey, function(err, friend) {
+        should(friend).be.type('number');
+        done(err);
       });
     });
   });
