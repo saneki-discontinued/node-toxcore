@@ -70,6 +70,25 @@ describe('Tox', function() {
     });
   });
 
+  describe('#setStatusMessage(), #setStatusMessageSync(), #getStatusMessage(), #getStatusMessageSync()', function() {
+    it('should set and get the status message', function() {
+      var statusMessage = 'Hello world!';
+      tox.setStatusMessageSync(statusMessage);
+      tox.getStatusMessageSync().should.equal(statusMessage);
+    });
+
+    it('should set and get the status message (async)', function(done) {
+      var statusMessage = 'Some status message';
+      tox.setStatusMessage(statusMessage, function(err) {
+        if(err) done(err);
+        tox.getStatusMessage(function(err, newStatusMessage) {
+          newStatusMessage.should.equal(statusMessage);
+          done(err);
+        });
+      });
+    });
+  });
+
   describe('#getUdpPort(), #getUdpPortSync()', function() {
     it('should return a Number with udp enabled by default', function() {
       var port = tox.getUdpPortSync();
