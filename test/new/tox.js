@@ -89,6 +89,25 @@ describe('Tox', function() {
     });
   });
 
+  describe('#setStatus(), #setStatusSync(), #getStatus(), #getStatusSync()', function() {
+    it('should set and get the status', function() {
+      var status = 1;
+      tox.setStatusSync(status);
+      tox.getStatusSync().should.equal(status);
+    });
+
+    it('should set and get the status (async)', function(done) {
+      var status = 2;
+      tox.setStatus(status, function(err) {
+        if(err) done(err);
+        tox.getStatus(function(err, newStatus) {
+          newStatus.should.equal(status);
+          done(err);
+        });
+      });
+    });
+  });
+
   describe('#getUdpPort(), #getUdpPortSync()', function() {
     it('should return a Number with udp enabled by default', function() {
       var port = tox.getUdpPortSync();
