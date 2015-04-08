@@ -22,5 +22,9 @@ nodes.forEach(function(node) {
   tox.bootstrapSync(node.address, node.port, node.key);
 });
 
+tox.on('selfConnectionStatus', function(e) {
+  console.log(e.isConnected() ? 'Connected' : 'Disconnected');
+});
+
 // Start the tox_iterate loop
 tox.start();

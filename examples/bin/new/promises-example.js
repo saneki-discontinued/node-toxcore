@@ -43,10 +43,19 @@ var bootstrap = function(callback) {
   });
 };
 
+var initCallbacks = function(callback) {
+  tox.on('selfConnectionStatus', function(e) {
+    console.log(e.isConnected() ? 'Connected' : 'Disconnected');
+  });
+
+  callback();
+};
+
 // Initialize everything + bootstrap from nodes, then when everything
 // is ready, start
 async.parallel([
-  bootstrap       // Bootstrap
+  bootstrap,     // Bootstrap
+  initCallbacks  // Initialize callbacks
 ], function() {
   tox.start(); // Start
 });
