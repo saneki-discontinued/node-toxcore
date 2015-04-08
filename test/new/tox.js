@@ -227,6 +227,28 @@ describe('Tox', function() {
     });
   });
 
+  describe('#getSavedataSize(), #getSavedataSizeSync(), #getSavedata(), #getSavedataSync()', function() {
+    it('should save data to a Buffer of the specified size', function() {
+      var size = tox.getSavedataSizeSync();
+      var data = tox.getSavedataSync();
+      data.length.should.equal(size);
+    });
+
+    it('should save data to a Buffer of the specified size (async)', function(done) {
+      tox.getSavedataSize(function(err, size) {
+        if(err) {
+          done(err);
+          return;
+        }
+
+        tox.getSavedata(function(err, data) {
+          data.length.should.equal(size);
+          done(err);
+        });
+      });
+    });
+  });
+
   describe('#getOptions()', function() {
     it('should handle proxies', function() {
       var prox1 = new Tox({ proxy: { type: 'http', address: '12.34.56.92', port: 9411 } }),
