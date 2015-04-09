@@ -18,6 +18,10 @@ var tox = new toxcore.Tox();
 var bootstrap = function(callback) {
   // Define nodes to bootstrap from
   var nodes = [
+    { maintainer: 'saneki',
+      address: '96.31.85.154',
+      port: 33445,
+      key: '674153CF49616CD1C4ADF44B004686FC1F6C9DCDD048EF89B117B3F02AA0B778' },
     { maintainer: 'Impyy',
       address: '178.62.250.138',
       port: 33445,
