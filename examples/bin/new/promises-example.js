@@ -107,6 +107,16 @@ var initCallbacks = function(callback) {
         console.log('Stopped typing to friend[' + e.friend() + ']');
       });
     }
+
+    if(e.message() === 'profile') {
+      var getName = tox.getFriendNameAsync(e.friend()),
+          getStatusMessage = tox.getFriendStatusMessageAsync(e.friend());
+      Promise.join(getName, getStatusMessage, function(name, statusMessage) {
+        console.log('Friend ' + e.friend() + ' profile:');
+        console.log('  Name: ' + name);
+        console.log('  Status message: ' + statusMessage);
+      });
+    }
   });
 
   callback();

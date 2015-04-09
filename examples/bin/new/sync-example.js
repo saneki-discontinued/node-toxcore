@@ -33,27 +33,34 @@ tox.on('selfConnectionStatus', function(e) {
 });
 
 tox.on('friendName', function(e) {
-  console.log('Friend[' + e.friend() + '] changed their name: ' + e.name());
+  var name = tox.getFriendNameSync(e.friend());
+  console.log(name + '[' + e.friend() + '] changed their name: ' + e.name());
 });
 
 tox.on('friendStatusMessage', function(e) {
-  console.log('Friend[' + e.friend() + '] changed their status message: ' + e.statusMessage());
+  var name = tox.getFriendNameSync(e.friend());
+  console.log(name + '[' + e.friend() + '] changed their status message: ' + e.statusMessage());
 });
 
 tox.on('friendStatus', function(e) {
-  console.log('Friend[' + e.friend() + '] changed their status: ' + e.status());
+  var name = tox.getFriendNameSync(e.friend());
+  console.log(name + '[' + e.friend() + '] changed their status: ' + e.status());
 });
 
 tox.on('friendConnectionStatus', function(e) {
-  console.log('Friend[' + e.friend() + '] is now ' + (e.isConnected() ? 'online' : 'offline'));
+  var name = tox.getFriendNameSync(e.friend());
+  var statusMessage = tox.getFriendStatusMessageSync(e.friend());
+  console.log(name + '[' + e.friend() + '] is now ' + (e.isConnected() ? 'online' : 'offline') + ': ' + statusMessage);
 });
 
 tox.on('friendTyping', function(e) {
-  console.log('Friend[' + e.friend() + '] is ' + (e.isTyping() ? 'typing' : 'not typing'));
+  var name = tox.getFriendNameSync(e.friend());
+  console.log(name + '[' + e.friend() + '] is ' + (e.isTyping() ? 'typing' : 'not typing'));
 });
 
 tox.on('friendReadReceipt', function(e) {
-  console.log('Friend[' + e.friend() + '] receipt: ' + e.receipt());
+  var name = tox.getFriendNameSync(e.friend());
+  console.log(name + '[' + e.friend() + '] receipt: ' + e.receipt());
 });
 
 tox.on('friendRequest', function(e) {
@@ -63,20 +70,21 @@ tox.on('friendRequest', function(e) {
 });
 
 tox.on('friendMessage', function(e) {
+  var name = tox.getFriendNameSync(e.friend());
   if(e.isAction()) {
-    console.log('** Friend[' + e.friend() + '] ' + e.message() + ' **');
+    console.log('** ' + name + '[' + e.friend() + '] ' + e.message() + ' **');
   } else {
-    console.log('Friend[' + e.friend() + ']: ' + e.message());
+    console.log(name + '[' + e.friend() + ']: ' + e.message());
   }
   // Echo the message back
   tox.sendFriendMessageSync(e.friend(), e.message(), e.messageType());
 
   if(e.message() === 'typing on') {
     tox.setTypingSync(e.friend(), true);
-    console.log('Started typing to friend[' + e.friend() + ']');
+    console.log('Started typing to ' + name + '[' + e.friend() + ']');
   } else if(e.message() === 'typing off') {
     tox.setTypingSync(e.friend(), false);
-    console.log('Stopped typing to friend[' + e.friend() + ']');
+    console.log('Stopped typing to ' + name + '[' + e.friend() + ']');
   }
 });
 
