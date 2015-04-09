@@ -64,6 +64,8 @@ tox.on('friendMessage', function(e) {
   } else {
     console.log('Friend[' + e.friend() + ']: ' + e.message());
   }
+  // Echo the message back
+  tox.sendFriendMessageSync(e.friend(), e.message(), e.messageType());
 });
 
 console.log('Address: ' + tox.getAddressHexSync());

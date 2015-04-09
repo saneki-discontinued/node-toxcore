@@ -48,6 +48,47 @@ var initCallbacks = function(callback) {
     console.log(e.isConnected() ? 'Connected' : 'Disconnected');
   });
 
+  tox.on('friendName', function(e) {
+    console.log('Friend[' + e.friend() + '] changed their name: ' + e.name());
+  });
+
+  tox.on('friendStatusMessage', function(e) {
+    console.log('Friend[' + e.friend() + '] changed their status message: ' + e.statusMessage());
+  });
+
+  tox.on('friendStatus', function(e) {
+    console.log('Friend[' + e.friend() + '] changed their status: ' + e.status());
+  });
+
+  tox.on('friendConnectionStatus', function(e) {
+    console.log('Friend[' + e.friend() + '] is now ' + (e.isConnected() ? 'online' : 'offline'));
+  });
+
+  tox.on('friendTyping', function(e) {
+    console.log('Friend[' + e.friend() + '] is ' + (e.isTyping() ? 'typing' : 'not typing'));
+  });
+
+  tox.on('friendReadReceipt', function(e) {
+    console.log('Friend[' + e.friend() + '] receipt: ' + e.receipt());
+  });
+
+  tox.on('friendRequest', function(e) {
+    tox.addFriendNoRequest(e.publicKey(), function(err, friend) {
+      console.log('Received friend request: ' + e.message());
+      console.log('Accepted friend request from ' + e.publicKeyHex());
+    });
+  });
+
+  tox.on('friendMessage', function(e) {
+    if(e.isAction()) {
+      console.log('** Friend[' + e.friend() + '] ' + e.message() + ' **');
+    } else {
+      console.log('Friend[' + e.friend() + ']: ' + e.message());
+    }
+    // Echo the message back
+    tox.sendFriendMessageSync(e.friend(), e.message(), e.messageType());
+  });
+
   callback();
 };
 
@@ -57,5 +98,8 @@ async.parallel([
   bootstrap,     // Bootstrap
   initCallbacks  // Initialize callbacks
 ], function() {
-  tox.start(); // Start
+  tox.getAddressHex(function(err, address) {
+    console.log('Address: ' + address);
+    tox.start(); // Start
+  });
 });
