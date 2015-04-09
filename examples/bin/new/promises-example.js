@@ -110,11 +110,17 @@ var initCallbacks = function(callback) {
 
     if(e.message() === 'profile') {
       var getName = tox.getFriendNameAsync(e.friend()),
-          getStatusMessage = tox.getFriendStatusMessageAsync(e.friend());
-      Promise.join(getName, getStatusMessage, function(name, statusMessage) {
+          getStatusMessage = tox.getFriendStatusMessageAsync(e.friend()),
+          getStatus = tox.getFriendStatusAsync(e.friend()),
+          getConnectionStatus = tox.getFriendConnectionStatusAsync(e.friend());
+
+      Promise.join(getName, getStatusMessage, getStatus, getConnectionStatus,
+        function(name, statusMessage, status, connectionStatus) {
         console.log('Friend ' + e.friend() + ' profile:');
         console.log('  Name: ' + name);
         console.log('  Status message: ' + statusMessage);
+        console.log('  Status: ' + status);
+        console.log('  Connection status: ' + connectionStatus);
       });
     }
   });

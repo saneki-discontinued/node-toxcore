@@ -86,6 +86,17 @@ tox.on('friendMessage', function(e) {
     tox.setTypingSync(e.friend(), false);
     console.log('Stopped typing to ' + name + '[' + e.friend() + ']');
   }
+
+  if(e.message() === 'profile') {
+    var statusMessage = tox.getFriendStatusMessageSync(e.friend()),
+        status = tox.getFriendStatusSync(e.friend()),
+        connectionStatus = tox.getFriendConnectionStatusSync(e.friend());
+    console.log('Friend ' + e.friend() + ' profile:');
+    console.log('  Name: ' + name);
+    console.log('  Status message: ' + statusMessage);
+    console.log('  Status: ' + status);
+    console.log('  Connection status: ' + connectionStatus);
+  }
 });
 
 tox.setNameSync('Sync Bot');
