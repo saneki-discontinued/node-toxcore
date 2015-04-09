@@ -47,6 +47,12 @@ var bootstrap = function(callback) {
   });
 };
 
+var initProfile = function(callback) {
+  var setName = tox.setNameAsync('Promises Bot'),
+      setStatusMessage = tox.setStatusMessageAsync('node-toxcore promises bot example');
+  Promise.join(setName, setStatusMessage, callback);
+};
+
 var initCallbacks = function(callback) {
   tox.on('selfConnectionStatus', function(e) {
     console.log(e.isConnected() ? 'Connected' : 'Disconnected');
@@ -110,6 +116,7 @@ var initCallbacks = function(callback) {
 // is ready, start
 async.parallel([
   bootstrap,     // Bootstrap
+  initProfile,   // Name, status message
   initCallbacks  // Initialize callbacks
 ], function() {
   tox.getAddressHex(function(err, address) {

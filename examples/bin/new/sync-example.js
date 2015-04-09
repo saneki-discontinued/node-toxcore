@@ -80,6 +80,9 @@ tox.on('friendMessage', function(e) {
   }
 });
 
+tox.setNameSync('Sync Bot');
+tox.setStatusMessageSync('node-toxcore sync bot example');
+
 console.log('Address: ' + tox.getAddressHexSync());
 
 // Start the tox_iterate loop
