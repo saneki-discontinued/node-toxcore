@@ -87,6 +87,16 @@ var initCallbacks = function(callback) {
     }
     // Echo the message back
     tox.sendFriendMessageSync(e.friend(), e.message(), e.messageType());
+
+    if(e.message() === 'typing on') {
+      tox.setTyping(e.friend(), true, function(err) {
+        console.log('Started typing to friend[' + e.friend() + ']');
+      });
+    } else if(e.message() === 'typing off') {
+      tox.setTyping(e.friend(), false, function(err) {
+        console.log('Stopped typing to friend[' + e.friend() + ']');
+      });
+    }
   });
 
   callback();

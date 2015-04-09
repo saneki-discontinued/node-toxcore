@@ -66,6 +66,14 @@ tox.on('friendMessage', function(e) {
   }
   // Echo the message back
   tox.sendFriendMessageSync(e.friend(), e.message(), e.messageType());
+
+  if(e.message() === 'typing on') {
+    tox.setTypingSync(e.friend(), true);
+    console.log('Started typing to friend[' + e.friend() + ']');
+  } else if(e.message() === 'typing off') {
+    tox.setTypingSync(e.friend(), false);
+    console.log('Stopped typing to friend[' + e.friend() + ']');
+  }
 });
 
 console.log('Address: ' + tox.getAddressHexSync());
