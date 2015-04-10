@@ -77,6 +77,8 @@ describe('Tox', function() {
 
       var retrievedKey = tox.getFriendPublicKeySync(added);
       retrievedKey.toHex().toLowerCase().should.equal(publicKey.toLowerCase());
+
+      tox.hasFriendSync(added).should.be.true;
     });
 
     it('should return a number if a friend has the public key (async)', function(done) {
@@ -89,8 +91,12 @@ describe('Tox', function() {
             if(err) { done(err); return; }
             added.should.equal(retrieved);
             tox.getFriendPublicKey(added, function(err, retrievedKey) {
+              if(err) { done(err); return; }
               retrievedKey.toHex().toLowerCase().should.equal(publicKey.toLowerCase());
-              done(err);
+              tox.hasFriend(added, function(err, exists) {
+                exists.should.be.true;
+                done(err);
+              });
             });
           });
         });
