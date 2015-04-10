@@ -66,40 +66,106 @@ describe('Tox', function() {
     });
   });
 
-  describe('#getFriendByPublicKey(), #getFriendByPublicKeySync(), #getFriendPublicKey(), #getFriendPublicKeySync()', function() {
-    it('should return a number if a friend has the public key', function() {
-      var publicKey = fakePublicKeys[2];
-      (function() { tox.getFriendByPublicKeySync(publicKey) }).should.throw();
-      // Add and try again
-      var added = tox.addFriendNoRequestSync(publicKey);
-      var retrieved = tox.getFriendByPublicKeySync(publicKey);
-      added.should.equal(retrieved);
+  describe('friend getter functions', function() {
+    describe('before setting', function() {
+      describe('#getFriendByPublicKey(), #getFriendByPublicKeySync()', function() {
+        it('should throw an exception', function() {
+          (function() { tox.getFriendByPublicKeySync(fakePublicKeys[0]); }).should.throw();
+        });
 
-      var retrievedKey = tox.getFriendPublicKeySync(added);
-      retrievedKey.toHex().toLowerCase().should.equal(publicKey.toLowerCase());
+        it('should return an exception (async)', function(done) {
+          tox.getFriendByPublicKey(fakePublicKeys[0], function(err) {
+            should.exist(err);
+            done();
+          });
+        });
+      });
 
-      tox.hasFriendSync(added).should.be.true;
+      describe('#getFriendPublicKey(), #getFriendPublicKeySync()', function() {
+        it('should throw an exception', function() {
+          (function() { tox.getFriendPublicKeySync(0); }).should.throw();
+        });
+
+        it('should return an exception (async)', function(done) {
+          tox.getFriendPublicKey(0, function(err) {
+            should.exist(err);
+            done();
+          });
+        });
+      });
+
+      describe('#deleteFriend(), #deleteFriendSync()', function() {
+        it('should throw an exception if friend doesn\'t exist', function() {
+          (function() { tox.deleteFriendSync(0); }).should.throw();
+        });
+
+        it('should return an exception if friend doesn\'t exist', function(done) {
+          tox.deleteFriend(0, function(err) {
+            should.exist(err);
+            done();
+          });
+        });
+      });
+
+      describe('#hasFriend(), #hasFriendSync()', function() {
+        it('should return false if friend doesn\'t exist', function() {
+          tox.hasFriendSync(0).should.be.false;
+        });
+
+        it('should return false if friend doesn\'t exist (async)', function(done) {
+          tox.hasFriend(0, function(err, exists) {
+            exists.should.be.false;
+            done(err);
+          });
+        });
+      });
     });
 
-    it('should return a number if a friend has the public key (async)', function(done) {
-      var publicKey = fakePublicKeys[3];
-      tox.getFriendByPublicKey(publicKey, function(err) {
-        should.exist(err);
-        tox.addFriendNoRequest(publicKey, function(err, added) {
-          if(err) { done(err); return; }
-          tox.getFriendByPublicKey(publicKey, function(err, retrieved) {
+    describe('#getFriendPublicKey(), #getFriendPublicKeySync()', function() {
+      it('should return a number if a friend has the public key', function() {
+        var publicKey = fakePublicKeys[2];
+        (function() { tox.getFriendByPublicKeySync(publicKey) }).should.throw();
+        // Add and try again
+        var added = tox.addFriendNoRequestSync(publicKey);
+        var retrieved = tox.getFriendByPublicKeySync(publicKey);
+        added.should.equal(retrieved);
+
+        var retrievedKey = tox.getFriendPublicKeySync(added);
+        retrievedKey.toHex().toLowerCase().should.equal(publicKey.toLowerCase());
+
+        tox.hasFriendSync(added).should.be.true;
+      });
+
+      it('should return a number if a friend has the public key (async)', function(done) {
+        var publicKey = fakePublicKeys[3];
+        tox.getFriendByPublicKey(publicKey, function(err) {
+          should.exist(err);
+          tox.addFriendNoRequest(publicKey, function(err, added) {
             if(err) { done(err); return; }
-            added.should.equal(retrieved);
-            tox.getFriendPublicKey(added, function(err, retrievedKey) {
+            tox.getFriendByPublicKey(publicKey, function(err, retrieved) {
               if(err) { done(err); return; }
-              retrievedKey.toHex().toLowerCase().should.equal(publicKey.toLowerCase());
-              tox.hasFriend(added, function(err, exists) {
-                exists.should.be.true;
-                done(err);
+              added.should.equal(retrieved);
+              tox.getFriendPublicKey(added, function(err, retrievedKey) {
+                if(err) { done(err); return; }
+                retrievedKey.toHex().toLowerCase().should.equal(publicKey.toLowerCase());
+                tox.hasFriend(added, function(err, exists) {
+                  exists.should.be.true;
+                  done(err);
+                });
               });
             });
           });
         });
+      });
+    });
+
+    describe('#deleteFriend(), #deleteFriendSync()', function() {
+      it('should remove an existing friend', function() {
+        tox.deleteFriendSync(0);
+      });
+
+      it('should remove an existing friend (async)', function(done) {
+        tox.deleteFriend(1, done);
       });
     });
   });
