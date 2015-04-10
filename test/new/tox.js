@@ -1,8 +1,11 @@
 var assert = require('assert');
+var buffertools = require('buffertools');
 var should = require('should');
 var path = require('path');
 var Tox = require(path.join(__dirname, '..', '..', 'lib', 'new', 'tox'));
 var consts = require(path.join(__dirname, '..', '..', 'lib', 'new', 'consts'));
+
+buffertools.extend();
 
 // @todo: Cleanup (kill tox instances afterwards)
 describe('Tox', function() {
@@ -63,7 +66,7 @@ describe('Tox', function() {
     });
   });
 
-  describe('#getFriendByPublicKey(), #getFriendByPublicKeySync()', function() {
+  describe('#getFriendByPublicKey(), #getFriendByPublicKeySync(), #getFriendPublicKey(), #getFriendPublicKeySync()', function() {
     it('should return a number if a friend has the public key', function() {
       var publicKey = fakePublicKeys[2];
       (function() { tox.getFriendByPublicKeySync(publicKey) }).should.throw();
@@ -71,6 +74,9 @@ describe('Tox', function() {
       var added = tox.addFriendNoRequestSync(publicKey);
       var retrieved = tox.getFriendByPublicKeySync(publicKey);
       added.should.equal(retrieved);
+
+      var retrievedKey = tox.getFriendPublicKeySync(added);
+      retrievedKey.toHex().toLowerCase().should.equal(publicKey.toLowerCase());
     });
 
     it('should return a number if a friend has the public key (async)', function(done) {
@@ -78,14 +84,14 @@ describe('Tox', function() {
       tox.getFriendByPublicKey(publicKey, function(err) {
         should.exist(err);
         tox.addFriendNoRequest(publicKey, function(err, added) {
-          if(err) {
-            done(err);
-            return;
-          }
-
+          if(err) { done(err); return; }
           tox.getFriendByPublicKey(publicKey, function(err, retrieved) {
+            if(err) { done(err); return; }
             added.should.equal(retrieved);
-            done(err);
+            tox.getFriendPublicKey(added, function(err, retrievedKey) {
+              retrievedKey.toHex().toLowerCase().should.equal(publicKey.toLowerCase());
+              done(err);
+            });
           });
         });
       });
