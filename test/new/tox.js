@@ -28,7 +28,9 @@ describe('Tox', function() {
 
   var fakePublicKeys = [
     '94f44a6edbfc8ff1dc3ed3c460da046f4280a234edcbd7f11c023e43f4f0cd67',
-    '5a1cd1a18f4411de8267154b6d9ac3a93d98e8c6e682987803cc6057472c444c'
+    '5a1cd1a18f4411de8267154b6d9ac3a93d98e8c6e682987803cc6057472c444c',
+    'fd31376ac876b7a5199239e859ec001a518dc79e9fb5c486b5dde3f3fd97c052',
+    '32ab7ac2c01b0413804f2de691abafd1420f4bb41a1cdcaafbb4650b3b13a41a'
   ];
 
   describe('#getAddress(), #getAddressSync()', function() {
@@ -57,6 +59,35 @@ describe('Tox', function() {
       tox.getAddressHex(function(err, addr) {
         addr.should.match(addressRegex);
         done(err);
+      });
+    });
+  });
+
+  describe('#getFriendByPublicKey(), #getFriendByPublicKeySync()', function() {
+    it('should return a number if a friend has the public key', function() {
+      var publicKey = fakePublicKeys[2];
+      (function() { tox.getFriendByPublicKeySync(publicKey) }).should.throw();
+      // Add and try again
+      var added = tox.addFriendNoRequestSync(publicKey);
+      var retrieved = tox.getFriendByPublicKeySync(publicKey);
+      added.should.equal(retrieved);
+    });
+
+    it('should return a number if a friend has the public key (async)', function(done) {
+      var publicKey = fakePublicKeys[3];
+      tox.getFriendByPublicKey(publicKey, function(err) {
+        should.exist(err);
+        tox.addFriendNoRequest(publicKey, function(err, added) {
+          if(err) {
+            done(err);
+            return;
+          }
+
+          tox.getFriendByPublicKey(publicKey, function(err, retrieved) {
+            added.should.equal(retrieved);
+            done(err);
+          });
+        });
       });
     });
   });
