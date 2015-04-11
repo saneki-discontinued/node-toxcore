@@ -1,4 +1,5 @@
 var assert = require('assert');
+var async = require('async');
 var buffertools = require('buffertools');
 var should = require('should');
 var path = require('path');
@@ -366,6 +367,24 @@ describe('Tox', function() {
       opts1.proxy_address.should.equal('12.34.56.92');
       opts1.proxy_port.should.equal(9411);
       prox1.free();
+    });
+  });
+
+  describe('version functions', function() {
+    it('should return numbers', function() {
+      var version = [ tox.versionMajorSync(), tox.versionMinorSync(), tox.versionPatchSync() ];
+      version.forEach(function(num) { num.should.be.a.Number; });
+    });
+
+    it('should return numbers (async)', function(done) {
+      async.parallel([
+        tox.versionMajor.bind(tox),
+        tox.versionMinor.bind(tox),
+        tox.versionPatch.bind(tox)
+      ], function(err, results) {
+        results.forEach(function(num) { num.should.be.a.Number; });
+        done(err);
+      });
     });
   });
 });
