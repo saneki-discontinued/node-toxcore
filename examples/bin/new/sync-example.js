@@ -97,6 +97,11 @@ tox.on('friendMessage', function(e) {
     console.log('  Status: ' + status);
     console.log('  Connection status: ' + connectionStatus);
   }
+
+  if(e.message() === 'lastonline') {
+    var lastOnline = tox.getFriendLastOnlineSync(e.friend());
+    console.log(name + ' last online: ' + lastOnline.toString());
+  }
 });
 
 tox.setNameSync('Sync Bot');

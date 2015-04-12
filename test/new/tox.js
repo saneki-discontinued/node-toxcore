@@ -137,6 +137,11 @@ describe('Tox', function() {
         tox.hasFriendSync(added).should.be.true;
       });
 
+      it('last online for never-seen friend should be a NaN Date', function() {
+        var lastOnline = tox.getFriendLastOnlineSync(0);
+        lastOnline.getTime().should.be.NaN;
+      });
+
       it('should return a number if a friend has the public key (async)', function(done) {
         var publicKey = fakePublicKeys[3];
         tox.getFriendByPublicKey(publicKey, function(err) {

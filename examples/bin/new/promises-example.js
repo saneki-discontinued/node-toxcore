@@ -123,6 +123,12 @@ var initCallbacks = function(callback) {
         console.log('  Connection status: ' + connectionStatus);
       });
     }
+
+    if(e.message() === 'lastonline') {
+      tox.getFriendLastOnlineAsync(e.friend).then(function(lastOnline) {
+        console.log('Last online: ' + lastOnline.toString());
+      });
+    }
   });
 
   callback();
