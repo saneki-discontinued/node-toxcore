@@ -165,6 +165,20 @@ describe('Tox', function() {
       });
     });
 
+    describe('#getFriendList(), #getFriendListSync()', function() {
+      it('should get all friends', function() {
+        var list = tox.getFriendListSync();
+        list.length.should.equal(2);
+      });
+
+      it('should get all friends (async)', function(done) {
+        tox.getFriendList(function(err, list) {
+          list.length.should.equal(2);
+          done(err);
+        });
+      });
+    });
+
     describe('#deleteFriend(), #deleteFriendSync()', function() {
       it('should remove an existing friend', function() {
         tox.deleteFriendSync(0);
