@@ -419,5 +419,22 @@ describe('Tox', function() {
         done(err);
       });
     });
+
+    it('should set a number', function() {
+      var nospam = 0x1234;
+      tox.setNospamSync(nospam);
+      tox.getNospamSync().should.equal(nospam);
+    });
+
+    it('should set a number (async)', function(done) {
+      var nospam = 0x9876;
+      async.series([
+        Tox.prototype.setNospam.bind(tox, nospam),
+        Tox.prototype.getNospam.bind(tox)
+      ], function(err, results) {
+        results[1].should.equal(nospam);
+        done(err);
+      });
+    });
   });
 });
