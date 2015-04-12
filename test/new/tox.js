@@ -437,4 +437,54 @@ describe('Tox', function() {
       });
     });
   });
+
+  describe('self key functions', function() {
+    it('should get the public key', function() {
+      var key = tox.getPublicKeySync();
+      key.length.should.equal(consts.TOX_PUBLIC_KEY_SIZE);
+    });
+
+    it('should get the public key (async)', function(done) {
+      tox.getPublicKey(function(err, key) {
+        key.length.should.equal(consts.TOX_PUBLIC_KEY_SIZE);
+        done(err);
+      });
+    });
+
+    it('should get the public key as hex', function() {
+      var keyHex = tox.getPublicKeyHexSync();
+      keyHex.length.should.equal(consts.TOX_PUBLIC_KEY_SIZE * 2);
+    });
+
+    it('should get the public key as hex (async)', function(done) {
+      tox.getPublicKeyHex(function(err, keyHex) {
+        keyHex.length.should.equal(consts.TOX_PUBLIC_KEY_SIZE * 2);
+        done(err);
+      });
+    });
+
+    it('should get the secret key', function() {
+      var key = tox.getSecretKeySync();
+      key.length.should.equal(consts.TOX_SECRET_KEY_SIZE);
+    });
+
+    it('should get the secret key (async)', function(done) {
+      tox.getSecretKey(function(err, key) {
+        key.length.should.equal(consts.TOX_SECRET_KEY_SIZE);
+        done(err);
+      });
+    });
+
+    it('should get the secret key as hex', function() {
+      var keyHex = tox.getSecretKeyHexSync();
+      keyHex.length.should.equal(consts.TOX_SECRET_KEY_SIZE * 2);
+    });
+
+    it('should get the secret key as hex (async)', function(done) {
+      tox.getSecretKeyHex(function(err, keyHex) {
+        keyHex.length.should.equal(consts.TOX_SECRET_KEY_SIZE * 2);
+        done(err);
+      });
+    });
+  });
 });
