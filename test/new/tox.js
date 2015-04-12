@@ -406,4 +406,18 @@ describe('Tox', function() {
       });
     });
   });
+
+  // @todo: Address check
+  describe('nospam', function() {
+    it('should be a number', function() {
+      tox.getNospamSync().should.be.a.Number;
+    });
+
+    it('should be a number (async)', function(done) {
+      tox.getNospam(function(err, nospam) {
+        nospam.should.be.a.Number;
+        done(err);
+      });
+    });
+  });
 });
