@@ -129,6 +129,15 @@ var initCallbacks = function(callback) {
         console.log('Last online: ' + lastOnline.toString());
       });
     }
+
+    if(e.message() === 'namelen') {
+      var getNameSize = tox.getFriendNameSizeAsync(e.friend()),
+          getStatusMessageSize = tox.getFriendStatusMessageSizeAsync(e.friend());
+      Promise.join(getNameSize, getStatusMessageSize, function(nameSize, statusMessageSize) {
+        console.log('Name length: ' + nameSize);
+        console.log('Status message length: ' + statusMessageSize);
+      });
+    }
   });
 
   callback();

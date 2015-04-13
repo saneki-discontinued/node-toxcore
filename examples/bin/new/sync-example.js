@@ -102,6 +102,11 @@ tox.on('friendMessage', function(e) {
     var lastOnline = tox.getFriendLastOnlineSync(e.friend());
     console.log(name + ' last online: ' + lastOnline.toString());
   }
+
+  if(e.message() === 'namelen') {
+    console.log('Name length: ' + tox.getFriendNameSizeSync(e.friend()));
+    console.log('Status message length: ' + tox.getFriendStatusMessageSizeSync(e.friend()));
+  }
 });
 
 tox.setNameSync('Sync Bot');
