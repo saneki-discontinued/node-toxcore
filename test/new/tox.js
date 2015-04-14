@@ -438,6 +438,23 @@ describe('Tox', function() {
     });
   });
 
+  describe('ToxOptions', function() {
+    it('should allocate and free', function() {
+      var opts = tox.newOptionsSync();
+      tox.freeOptionsSync(opts);
+    });
+
+    it('should allocate and free (async)', function(done) {
+      tox.newOptions(function(err, opts) {
+        if(!err) {
+          tox.freeOptions(opts, function(err) {
+            done(err);
+          });
+        } else done(err);
+      });
+    });
+  });
+
   describe('self key functions', function() {
     it('should get the public key', function() {
       var key = tox.getPublicKeySync();
