@@ -165,6 +165,20 @@ describe('Tox', function() {
       });
     });
 
+    describe('#getFriendPublicKeyHex(), #getFriendPublicKeyHexSync()', function() {
+      it('should get the public key as hex', function() {
+        var key = tox.getFriendPublicKeyHexSync(0);
+        key.toLowerCase().should.equal(fakePublicKeys[2].toLowerCase());
+      });
+
+      it('should get the public key as hex (async)', function(done) {
+        tox.getFriendPublicKeyHex(1, function(err, key) {
+          key.toLowerCase().should.equal(fakePublicKeys[3].toLowerCase());
+          done(err);
+        });
+      });
+    });
+
     describe('#getFriendList(), #getFriendListSync()', function() {
       it('should get all friends', function() {
         var list = tox.getFriendListSync();
