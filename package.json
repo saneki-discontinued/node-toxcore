@@ -3,7 +3,7 @@
   "version": "0.0.18",
   "description": "Node bindings for libtoxcore",
   "keywords": ["im", "libtoxcore", "node-toxcore", "skype", "tox", "toxcore"],
-  "license": "WTFPL",
+  "license": "GPL-3.0",
   "author": {
     "name": "saneki",
     "email": "s@neki.me"
