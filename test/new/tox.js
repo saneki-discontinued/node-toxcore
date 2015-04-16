@@ -403,6 +403,14 @@ describe('Tox', function() {
     });
   });
 
+  describe('old groupchat support', function() {
+    it('should not break when { old: true } is passed to Tox constructor', function() {
+      var toxWithOld = new Tox({ old: true });
+      should.exist(toxWithOld.old());
+      toxWithOld.free();
+    });
+  });
+
   describe('version functions', function() {
     it('should return numbers', function() {
       var version = [ tox.versionMajorSync(), tox.versionMinorSync(), tox.versionPatchSync() ];
