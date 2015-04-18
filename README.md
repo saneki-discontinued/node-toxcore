@@ -6,13 +6,25 @@ node-toxcore [![Build Status](https://img.shields.io/travis/saneki/node-toxcore.
 Node.js bindings for [libtoxcore], built off of [node-ffi].
 
 
-### Warning
+### New API
 
-**node-toxcore** is in its very early stages. Until it reaches `v0.1.0`,
-things may unexpectedly change! Be wary.
+**node-toxcore** now uses the new toxcore api. If you want
+to use the old api, specify version `0.0.18` in your package.json. Note
+that support for the old api is discontinued, and version `0.0.18` may
+have bugs or not support certain things.
 
 
-### Simple Example
+### New API Progress
+
+- [x] toxcore
+- [ ] toxav
+- [ ] toxdns
+- [ ] toxencryptsave
+- [x] tox_old.h (old groupchats)
+- [ ] Higher level API
+
+
+### Synchronous Example
 
 ``` js
 var toxcore = require('toxcore');
@@ -20,22 +32,14 @@ var toxcore = require('toxcore');
 // Create a default Tox instance
 var tox = new toxcore.Tox();
 
-// ... or, create a Tox instance without an internal ToxAV instance
-var toxWithoutAV = new toxcore.Tox({
-  av: false
-});
-
 // ... or, create a Tox instance using specific paths for toxcore libraries
 var toxAtPath = new toxcore.Tox({
-  path: '/path/to/libtoxcore.so',
-  av: {
-    path: '/path/to/libtoxav.so'
-  }
+  path: '/path/to/libtoxcore.so'
 });
 
 // Bootstrap from nodes (see a list at: https://wiki.tox.im/Nodes)
-tox.bootstrapFromAddressSync('23.226.230.47', 33445, 'A09162D68618E742FFBCA1C2C70385E6679604B2D80EA6E84AD0996A1AC8A074'); // stal
-tox.bootstrapFromAddressSync('104.219.184.206', 443, '8CD087E31C67568103E8C2A28653337E90E6B8EDA0D765D57C6B5172B4F1F04C'); // Jfreegman
+tox.bootstrapSync('23.226.230.47', 33445, 'A09162D68618E742FFBCA1C2C70385E6679604B2D80EA6E84AD0996A1AC8A074'); // stal
+tox.bootstrapSync('104.219.184.206', 443, '8CD087E31C67568103E8C2A28653337E90E6B8EDA0D765D57C6B5172B4F1F04C'); // Jfreegman
 
 // Set your name and status message
 tox.setNameSync('My username');
@@ -52,6 +56,8 @@ console.log('Address: ' + tox.getAddressHexSync());
 // Start!
 tox.start();
 ```
+
+For more examples, see the `examples/` directory.
 
 
 ### Documentation
