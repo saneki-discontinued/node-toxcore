@@ -21,15 +21,19 @@ var buffertools = require('buffertools');
 var should = require('should');
 var path = require('path');
 var util = require(path.join(__dirname, '..', 'lib', 'util'));
-var size_t = util.size_t;
 
 buffertools.extend(); // Extend Buffer.prototype
 
 describe('util', function() {
-  describe('#size_t()', function() {
-    it('should return a Buffer', function() {
-      var zeroSize = size_t(0);
-      should.exist(zeroSize);
+  var validAddress = '35C51332183D8C3A15BFAEFE559EF65656361ABABAF87D66879318C9EA9B8D5048446515F4AB';
+  var validAddressBuffer = new Buffer(validAddress).fromHex();
+  describe('#isToxAddress()', function() {
+    it('should return true if Tox address (buffer)', function() {
+      util.isToxAddress(validAddressBuffer).should.be.true;
+    });
+
+    it('should return true if Tox address (string)', function() {
+      util.isToxAddress(validAddress).should.be.true;
     });
   });
 });

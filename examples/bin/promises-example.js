@@ -1,6 +1,5 @@
 /**
- * @file promises-example.js - node-toxcore async example with bluebird
- * promises.
+ * node-toxcore (new_api) async example with bluebird promises.
  *
  * This file is part of node-toxcore.
  *
@@ -28,11 +27,6 @@ Promise.promisifyAll(toxcore);
 
 var tox = new toxcore.Tox();
 
-var groupchats = {
-  'text': -1,
-  'av': -1
-};
-
 /**
  * Bootstrap tox via hardcoded nodes.
  * For more nodes, see: https://wiki.tox.im/Nodes
@@ -40,6 +34,10 @@ var groupchats = {
 var bootstrap = function(callback) {
   // Define nodes to bootstrap from
   var nodes = [
+    { maintainer: 'saneki',
+      address: '96.31.85.154',
+      port: 33445,
+      key: '674153CF49616CD1C4ADF44B004686FC1F6C9DCDD048EF89B117B3F02AA0B778' },
     { maintainer: 'Impyy',
       address: '178.62.250.138',
       port: 33445,
@@ -51,7 +49,7 @@ var bootstrap = function(callback) {
   ];
 
   async.mapAsync(nodes, function(node, cb) {
-    tox.bootstrapFromAddressAsync(node.address, node.port, node.key).then(function() {
+    tox.bootstrapAsync(node.address, node.port, node.key).then(function() {
       console.log('Successfully bootstrapped from ' + node.maintainer + ' at ' + node.address + ':' + node.port);
       console.log('... with key ' + node.key);
       cb();
@@ -65,57 +63,95 @@ var bootstrap = function(callback) {
   });
 };
 
-/**
- * Initialize ourself. Sets name and status message.
- * @private
- */
-var initSelf = function(callback) {
-  // Asynchronously set our name and status message using promises
-  Promise.join(
-    tox.setNameAsync('Bluebird'),
-    tox.setStatusMessageAsync('Some status message')
-  ).then(function() {
-    console.log('Successfully set name and status message!');
-    callback();
-  }).catch(function(err) {
-    console.error('Error (initSelf):', err);
-    callback(err);
-  });
+var initProfile = function(callback) {
+  var setName = tox.setNameAsync('Promises Bot'),
+      setStatusMessage = tox.setStatusMessageAsync('node-toxcore promises bot example');
+  Promise.join(setName, setStatusMessage, callback);
 };
 
-/**
- * Initialize our callbacks, listening for friend requests and messages.
- */
 var initCallbacks = function(callback) {
-  tox.on('friendRequest', function(evt) {
-    console.log('Accepting friend request from ' + evt.publicKeyHex());
-    // Automatically accept the request
-    tox.addFriendNoRequestAsync(evt.publicKey()).then(function() {
-      console.log('Successfully accepted the friend request!');
-    }).catch(function(err) {
-      console.error('Couldn\'t accept the friend request:', err);
+  tox.on('selfConnectionStatus', function(e) {
+    console.log(e.isConnected() ? 'Connected' : 'Disconnected');
+  });
+
+  tox.on('friendName', function(e) {
+    console.log('Friend[' + e.friend() + '] changed their name: ' + e.name());
+  });
+
+  tox.on('friendStatusMessage', function(e) {
+    console.log('Friend[' + e.friend() + '] changed their status message: ' + e.statusMessage());
+  });
+
+  tox.on('friendStatus', function(e) {
+    console.log('Friend[' + e.friend() + '] changed their status: ' + e.status());
+  });
+
+  tox.on('friendConnectionStatus', function(e) {
+    console.log('Friend[' + e.friend() + '] is now ' + (e.isConnected() ? 'online' : 'offline'));
+  });
+
+  tox.on('friendTyping', function(e) {
+    console.log('Friend[' + e.friend() + '] is ' + (e.isTyping() ? 'typing' : 'not typing'));
+  });
+
+  tox.on('friendReadReceipt', function(e) {
+    console.log('Friend[' + e.friend() + '] receipt: ' + e.receipt());
+  });
+
+  tox.on('friendRequest', function(e) {
+    tox.addFriendNoRequest(e.publicKey(), function(err, friend) {
+      console.log('Received friend request: ' + e.message());
+      console.log('Accepted friend request from ' + e.publicKeyHex());
     });
   });
 
-  tox.on('friendMessage', function(evt) {
-    console.log('Message from friend ' + evt.friend() + ': ' + evt.message());
-    // Echo message back to friend
-    tox.sendMessageAsync(evt.friend(), evt.message()).then(function(receipt) {
-      console.log('Echoed message back to friend, received receipt ' + receipt);
-    }).catch(function(err) {
-      console.error('Couldn\'t echo message back to friend:', err);
-    });
-  });
+  tox.on('friendMessage', function(e) {
+    if(e.isAction()) {
+      console.log('** Friend[' + e.friend() + '] ' + e.message() + ' **');
+    } else {
+      console.log('Friend[' + e.friend() + ']: ' + e.message());
+    }
+    // Echo the message back
+    tox.sendFriendMessageSync(e.friend(), e.message(), e.messageType());
 
-  // Setup friendMessage callback to listen for groupchat invite requests
-  tox.on('friendMessage', function(evt) {
-    if(evt.message() === 'invite text') {
-      tox.inviteAsync(evt.friend(), groupchats['text']).then(function() {
-        console.log('Invited ' + evt.friend() + ' to the text groupchat');
+    if(e.message() === 'typing on') {
+      tox.setTyping(e.friend(), true, function(err) {
+        console.log('Started typing to friend[' + e.friend() + ']');
       });
-    } else if(evt.message() === 'invite av') {
-      tox.inviteAsync(evt.friend(), groupchats['av']).then(function() {
-        console.log('Invited ' + evt.friend() + ' to the audio/video groupchat');
+    } else if(e.message() === 'typing off') {
+      tox.setTyping(e.friend(), false, function(err) {
+        console.log('Stopped typing to friend[' + e.friend() + ']');
+      });
+    }
+
+    if(e.message() === 'profile') {
+      var getName = tox.getFriendNameAsync(e.friend()),
+          getStatusMessage = tox.getFriendStatusMessageAsync(e.friend()),
+          getStatus = tox.getFriendStatusAsync(e.friend()),
+          getConnectionStatus = tox.getFriendConnectionStatusAsync(e.friend());
+
+      Promise.join(getName, getStatusMessage, getStatus, getConnectionStatus,
+        function(name, statusMessage, status, connectionStatus) {
+        console.log('Friend ' + e.friend() + ' profile:');
+        console.log('  Name: ' + name);
+        console.log('  Status message: ' + statusMessage);
+        console.log('  Status: ' + status);
+        console.log('  Connection status: ' + connectionStatus);
+      });
+    }
+
+    if(e.message() === 'lastonline') {
+      tox.getFriendLastOnlineAsync(e.friend).then(function(lastOnline) {
+        console.log('Last online: ' + lastOnline.toString());
+      });
+    }
+
+    if(e.message() === 'namelen') {
+      var getNameSize = tox.getFriendNameSizeAsync(e.friend()),
+          getStatusMessageSize = tox.getFriendStatusMessageSizeAsync(e.friend());
+      Promise.join(getNameSize, getStatusMessageSize, function(nameSize, statusMessageSize) {
+        console.log('Name length: ' + nameSize);
+        console.log('Status message length: ' + statusMessageSize);
       });
     }
   });
@@ -123,32 +159,15 @@ var initCallbacks = function(callback) {
   callback();
 };
 
-/**
- * Initialize the groupchats, and call the callback when finished.
- */
-var initGroupchats = function(callback) {
-  async.parallelAsync([
-    tox.addGroupchat.bind(tox),
-    tox.getAV().addGroupchat.bind(tox.getAV())
-  ]).then(function(results) {
-    groupchats['text'] = results[0];
-    groupchats['av'] = results[1];
-  }).finally(callback);
-};
-
 // Initialize everything + bootstrap from nodes, then when everything
-// is ready print our address and start
+// is ready, start
 async.parallel([
-  initSelf,       // Initialize name, status message
-  initCallbacks,  // Initialize callbacks
-  initGroupchats, // Initialize groupchats
-  bootstrap       // Bootstrap
+  bootstrap,     // Bootstrap
+  initProfile,   // Name, status message
+  initCallbacks  // Initialize callbacks
 ], function() {
-  // When everything is ready, print out our tox address
-  tox.getAddressHexAsync().then(function(addr) {
-    console.log('------------------------');
-    console.log('Tox address: ' + addr);
+  tox.getAddressHex(function(err, address) {
+    console.log('Address: ' + address);
+    tox.start(); // Start
   });
-
-  tox.start(); // Start
 });

@@ -17,354 +17,531 @@
  */
 
 var assert = require('assert');
+var async = require('async');
 var buffertools = require('buffertools');
 var should = require('should');
 var path = require('path');
-var toxcore = require(path.join(__dirname, '..', 'lib', 'main'));
+var Tox = require(path.join(__dirname, '..', 'lib', 'tox'));
+var consts = require(path.join(__dirname, '..', 'lib', 'consts'));
 
-buffertools.extend(); // Extend Buffer.prototype
+buffertools.extend();
 
+// @todo: Cleanup (kill tox instances afterwards)
 describe('Tox', function() {
-  var tox = new toxcore.Tox();
+  var tox = new Tox();
+  tox.start();
 
-  var toxWithoutHandle = new toxcore.Tox();
-  toxWithoutHandle.handle = undefined;
+  var toxNoUdp = new Tox({ udp: false });
+  toxNoUdp.start();
 
-  var addressHexStringRegex = /^[a-fA-F0-9]{76}$/;
-  var keyHexStringRegex = /^[a-fA-F0-9]{64}$/;
+  var customPort = 33510;
+  var toxCustomPort = new Tox({ startPort: customPort, endPort: customPort });
+  toxCustomPort.start();
 
-  var abcHashed = 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad';
+  var toxDead = new Tox();
+  toxDead.free();
 
-  describe('groupchat tests', function() {
-    describe('#addGroupchat(), #deleteGroupchat()', function() {
-      it('should add a new groupchat', function(done) {
-        // Add groupchat
-        tox.addGroupchat(function(err, groupnum) {
-          if(err) {
-            done(err);
-            return;
-          }
+  var addressRegex = /^[0-9a-fA-F]{76}$/;
 
-          (groupnum >= 0).should.be.true;
+  var fakeAddresses = [
+    '7bd26c7867ef3a08f0010dc646845284a52f69cb9fded8a2635da3bfe0ba7a4f8facd97f24d6',
+    '18e8bba90991e22dc70d8e8c188c93c4d38d62d2ab4c6d5aa6758b9b34925a31b18e0e25019b'
+  ];
 
-          // Delete groupchat
-          tox.deleteGroupchat(groupnum, function(err) {
-            done(err);
+  var fakePublicKeys = [
+    '94f44a6edbfc8ff1dc3ed3c460da046f4280a234edcbd7f11c023e43f4f0cd67',
+    '5a1cd1a18f4411de8267154b6d9ac3a93d98e8c6e682987803cc6057472c444c',
+    'fd31376ac876b7a5199239e859ec001a518dc79e9fb5c486b5dde3f3fd97c052',
+    '32ab7ac2c01b0413804f2de691abafd1420f4bb41a1cdcaafbb4650b3b13a41a'
+  ];
+
+  describe('#getAddress(), #getAddressSync()', function() {
+    it('should return a buffer of expected size', function() {
+      var addr = tox.getAddressSync();
+      addr.should.be.a.Buffer;
+      addr.length.should.equal(consts.TOX_FRIEND_ADDRESS_SIZE);
+    });
+
+    it('should return a buffer of expected size (async)', function(done) {
+      tox.getAddress(function(err, addr) {
+        addr.should.be.a.Buffer;
+        addr.length.should.equal(consts.TOX_FRIEND_ADDRESS_SIZE);
+        done(err);
+      });
+    });
+  });
+
+  describe('#getAddressHex(), #getAddressHexSync()', function() {
+    it('should return an address as a hex string', function() {
+      var addr = tox.getAddressHexSync();
+      addr.should.match(addressRegex);
+    });
+
+    it('should return an address as a hex string (async)', function(done) {
+      tox.getAddressHex(function(err, addr) {
+        addr.should.match(addressRegex);
+        done(err);
+      });
+    });
+  });
+
+  describe('friend getter functions', function() {
+    describe('before setting', function() {
+      describe('#getFriendByPublicKey(), #getFriendByPublicKeySync()', function() {
+        it('should throw an exception', function() {
+          (function() { tox.getFriendByPublicKeySync(fakePublicKeys[0]); }).should.throw();
+        });
+
+        it('should return an exception (async)', function(done) {
+          tox.getFriendByPublicKey(fakePublicKeys[0], function(err) {
+            should.exist(err);
+            done();
           });
         });
       });
 
-      it('should error if deleting non-existant groupchat', function(done) {
-        tox.deleteGroupchat(99999, function(err) {
-          should.exist(err);
-          done();
+      describe('#getFriendPublicKey(), #getFriendPublicKeySync()', function() {
+        it('should throw an exception', function() {
+          (function() { tox.getFriendPublicKeySync(0); }).should.throw();
+        });
+
+        it('should return an exception (async)', function(done) {
+          tox.getFriendPublicKey(0, function(err) {
+            should.exist(err);
+            done();
+          });
+        });
+      });
+
+      describe('#deleteFriend(), #deleteFriendSync()', function() {
+        it('should throw an exception if friend doesn\'t exist', function() {
+          (function() { tox.deleteFriendSync(0); }).should.throw();
+        });
+
+        it('should return an exception if friend doesn\'t exist', function(done) {
+          tox.deleteFriend(0, function(err) {
+            should.exist(err);
+            done();
+          });
+        });
+      });
+
+      describe('#hasFriend(), #hasFriendSync()', function() {
+        it('should return false if friend doesn\'t exist', function() {
+          tox.hasFriendSync(0).should.be.false;
+        });
+
+        it('should return false if friend doesn\'t exist (async)', function(done) {
+          tox.hasFriend(0, function(err, exists) {
+            exists.should.be.false;
+            done(err);
+          });
         });
       });
     });
 
-    describe('#addGroupchatSync(), #deleteGroupchatSync()', function() {
-      it('should add a new groupchat', function() {
-        var groupnum = tox.addGroupchatSync();
-        (groupnum >= 0).should.be.true;
-        tox.deleteGroupchatSync(groupnum);
+    describe('#getFriendPublicKey(), #getFriendPublicKeySync()', function() {
+      it('should return a number if a friend has the public key', function() {
+        var publicKey = fakePublicKeys[2];
+        (function() { tox.getFriendByPublicKeySync(publicKey) }).should.throw();
+        // Add and try again
+        var added = tox.addFriendNoRequestSync(publicKey);
+        var retrieved = tox.getFriendByPublicKeySync(publicKey);
+        added.should.equal(retrieved);
+
+        var retrievedKey = tox.getFriendPublicKeySync(added);
+        retrievedKey.toHex().toLowerCase().should.equal(publicKey.toLowerCase());
+
+        tox.hasFriendSync(added).should.be.true;
       });
 
-      it('should throw error if deleting a non-existant groupchat', function() {
-        (function() {
-          tox.deleteGroupchatSync(99999);
-        }).should.throw();
+      it('last online for never-seen friend should be a NaN Date', function() {
+        var lastOnline = tox.getFriendLastOnlineSync(0);
+        lastOnline.getTime().should.be.NaN;
+      });
+
+      it('should return a number if a friend has the public key (async)', function(done) {
+        var publicKey = fakePublicKeys[3];
+        tox.getFriendByPublicKey(publicKey, function(err) {
+          should.exist(err);
+          tox.addFriendNoRequest(publicKey, function(err, added) {
+            if(err) { done(err); return; }
+            tox.getFriendByPublicKey(publicKey, function(err, retrieved) {
+              if(err) { done(err); return; }
+              added.should.equal(retrieved);
+              tox.getFriendPublicKey(added, function(err, retrievedKey) {
+                if(err) { done(err); return; }
+                retrievedKey.toHex().toLowerCase().should.equal(publicKey.toLowerCase());
+                tox.hasFriend(added, function(err, exists) {
+                  exists.should.be.true;
+                  done(err);
+                });
+              });
+            });
+          });
+        });
+      });
+    });
+
+    describe('#getFriendPublicKeyHex(), #getFriendPublicKeyHexSync()', function() {
+      it('should get the public key as hex', function() {
+        var key = tox.getFriendPublicKeyHexSync(0);
+        key.toLowerCase().should.equal(fakePublicKeys[2].toLowerCase());
+      });
+
+      it('should get the public key as hex (async)', function(done) {
+        tox.getFriendPublicKeyHex(1, function(err, key) {
+          key.toLowerCase().should.equal(fakePublicKeys[3].toLowerCase());
+          done(err);
+        });
+      });
+    });
+
+    describe('#getFriendList(), #getFriendListSync()', function() {
+      it('should get all friends', function() {
+        var list = tox.getFriendListSync();
+        list.length.should.equal(2);
+      });
+
+      it('should get all friends (async)', function(done) {
+        tox.getFriendList(function(err, list) {
+          list.length.should.equal(2);
+          done(err);
+        });
+      });
+    });
+
+    describe('#deleteFriend(), #deleteFriendSync()', function() {
+      it('should remove an existing friend', function() {
+        tox.deleteFriendSync(0);
+      });
+
+      it('should remove an existing friend (async)', function(done) {
+        tox.deleteFriend(1, done);
       });
     });
   });
 
-  describe('constructing with options', function() {
-    // Todo: add a lot of tests
-    it('shouldn\'t break when using ipv6, udp, proxy (string) options', function() {
-      var toxWithOpts = new toxcore.Tox({
-        ipv6: true, udp: true, proxy: 'socks://127.0.0.1:9000'
+  describe('#setName(), #setNameSync(), #getName(), #getNameSync()', function() {
+    it('should set and get the name', function() {
+      var name = 'Hello world!';
+      tox.setNameSync(name);
+      tox.getNameSync().should.equal(name);
+    });
+
+    it('should set and get the name (async)', function(done) {
+      var name = 'Some name';
+      tox.setName(name, function(err) {
+        if(err) done(err);
+        tox.getName(function(err, newName) {
+          newName.should.equal(name);
+          done(err);
+        });
       });
     });
   });
 
-  describe('#checkHandle()', function() {
-    it('should return an error in callback when no handle', function(done) {
-      toxWithoutHandle.checkHandle(function(err) {
+  describe('#setStatusMessage(), #setStatusMessageSync(), #getStatusMessage(), #getStatusMessageSync()', function() {
+    it('should set and get the status message', function() {
+      var statusMessage = 'Hello world!';
+      tox.setStatusMessageSync(statusMessage);
+      tox.getStatusMessageSync().should.equal(statusMessage);
+    });
+
+    it('should set and get the status message (async)', function(done) {
+      var statusMessage = 'Some status message';
+      tox.setStatusMessage(statusMessage, function(err) {
+        if(err) done(err);
+        tox.getStatusMessage(function(err, newStatusMessage) {
+          newStatusMessage.should.equal(statusMessage);
+          done(err);
+        });
+      });
+    });
+  });
+
+  describe('#setStatus(), #setStatusSync(), #getStatus(), #getStatusSync()', function() {
+    it('should set and get the status', function() {
+      var status = 1;
+      tox.setStatusSync(status);
+      tox.getStatusSync().should.equal(status);
+    });
+
+    it('should set and get the status (async)', function(done) {
+      var status = 2;
+      tox.setStatus(status, function(err) {
+        if(err) done(err);
+        tox.getStatus(function(err, newStatus) {
+          newStatus.should.equal(status);
+          done(err);
+        });
+      });
+    });
+  });
+
+  describe('#addFriend(), #addFriendSync(), #addFriendNoRequest(), #addFriendNoRequestSync()', function() {
+    it('should add a friend from a hex string address', function() {
+      var addr = fakeAddresses[0],
+          friend = tox.addFriendSync(addr, 'Hi!');
+      should(friend).be.type('number');
+    });
+
+    it('should add a friend from a hex string address (async)', function(done) {
+      var addr = fakeAddresses[1];
+      tox.addFriend(addr, 'Hello', function(err, friend) {
+        should(friend).be.type('number');
+        done(err);
+      });
+    });
+
+    it('should add a friend from a hex string public key', function() {
+      var publicKey = fakePublicKeys[0],
+          friend = tox.addFriendNoRequestSync(publicKey);
+      should(friend).be.type('number');
+    });
+
+    it('should add a friend from a hex string public key (async)', function(done) {
+      var publicKey = fakePublicKeys[1];
+      tox.addFriendNoRequest(publicKey, function(err, friend) {
+        should(friend).be.type('number');
+        done(err);
+      });
+    });
+  });
+
+  describe('#getUdpPort(), #getUdpPortSync()', function() {
+    it('should return a Number with udp enabled by default', function() {
+      var port = tox.getUdpPortSync();
+      port.should.be.a.Number;
+      port.should.be.greaterThan(0);
+    });
+
+    it('should return a Number with udp enabled by default (async)', function(done) {
+      tox.getUdpPort(function(err, port) {
+        port.should.be.a.Number;
+        port.should.be.greaterThan(0);
+        done(err);
+      });
+    });
+
+    it('should return the port specified', function() {
+      var port = toxCustomPort.getUdpPortSync();
+      port.should.equal(customPort);
+    });
+
+    it('should return the port specified (async)', function(done) {
+      toxCustomPort.getUdpPort(function(err, port) {
+        port.should.equal(customPort);
+        done(err);
+      });
+    });
+
+    it('should throw a not-bound error if not listening on udp', function() {
+      (function() { toxNoUdp.getUdpPortSync(); }).should.throw();
+    });
+
+    it('should return a not-bound error if not listening on udp (async)', function(done) {
+      toxNoUdp.getUdpPort(function(err, port) {
+        should.exist(err);
+        done();
+      });
+    });
+
+    it('should throw an error if no handle', function() {
+      (function() { toxDead.getUdpPortSync(); }).should.throw();
+    });
+
+    it('should return an error if no handle (async)', function(done) {
+      toxDead.getUdpPort(function(err, port) {
         should.exist(err);
         done();
       });
     });
   });
 
-  describe('#checkHandleSync()', function() {
-    it('should throw an error when no handle', function() {
-      try {
-        toxWithoutHandle.checkHandleSync();
-        should.fail('checkHandleSync should have thrown an error');
-      } catch(e) {
-        should.exist(e);
-      }
+  describe('#getTcpPort(), #getTcpPortSync()', function() {
+    it('should throw a not-bound error if not a tcp relay', function() {
+      (function() { tox.getTcpPortSync(); }).should.throw();
     });
 
-    it('shouldn\'t throw an error when handle', function() {
-      try {
-        tox.checkHandleSync();
-      } catch(e) {
-        should.fail('checkHandleSync shouldn\'t have thrown an error');
-      }
+    it('should return a not-bound error if not a tcp relay (async)', function(done) {
+      tox.getTcpPort(function(err, port) {
+        should.exist(err);
+        done();
+      });
     });
   });
 
-  describe('#countFriendList()', function() {
-    it('should return 0 in callback when no friend', function(done) {
-      tox.countFriendList(function(err, res) {
-        res.should.equal(0);
+  describe('#isUdp()', function() {
+    it('should return true with udp enabled by default', function() {
+      tox.isUdp().should.be.true;
+    });
+
+    it('should return false if not listening on an udp port', function() {
+      toxNoUdp.isUdp().should.be.false;
+    });
+  });
+
+  describe('#isTcp()', function() {
+    it('should return false if not a tcp relay', function() {
+      tox.isTcp().should.be.false;
+    });
+  });
+
+  describe('#getSavedataSize(), #getSavedataSizeSync(), #getSavedata(), #getSavedataSync()', function() {
+    it('should save data to a Buffer of the specified size', function() {
+      var size = tox.getSavedataSizeSync();
+      var data = tox.getSavedataSync();
+      data.length.should.equal(size);
+    });
+
+    it('should save data to a Buffer of the specified size (async)', function(done) {
+      tox.getSavedataSize(function(err, size) {
+        if(err) {
+          done(err);
+          return;
+        }
+
+        tox.getSavedata(function(err, data) {
+          data.length.should.equal(size);
+          done(err);
+        });
+      });
+    });
+  });
+
+  describe('#getOptions()', function() {
+    it('should handle proxies', function() {
+      var prox1 = new Tox({ proxy: { type: 'http', address: '12.34.56.92', port: 9411 } }),
+          opts1 = prox1.getOptions();
+      opts1.proxy_type.should.equal(consts.TOX_PROXY_TYPE_HTTP);
+      opts1.proxy_address.should.equal('12.34.56.92');
+      opts1.proxy_port.should.equal(9411);
+      prox1.free();
+    });
+  });
+
+  describe('old groupchat support', function() {
+    it('should not break when { old: true } is passed to Tox constructor', function() {
+      var toxWithOld = new Tox({ old: true });
+      should.exist(toxWithOld.old());
+      toxWithOld.free();
+    });
+  });
+
+  describe('version functions', function() {
+    it('should return numbers', function() {
+      var version = [ tox.versionMajorSync(), tox.versionMinorSync(), tox.versionPatchSync() ];
+      version.forEach(function(num) { num.should.be.a.Number; });
+    });
+
+    it('should return numbers (async)', function(done) {
+      async.parallel([
+        tox.versionMajor.bind(tox),
+        tox.versionMinor.bind(tox),
+        tox.versionPatch.bind(tox)
+      ], function(err, results) {
+        results.forEach(function(num) { num.should.be.a.Number; });
         done(err);
       });
     });
   });
 
-  describe('#countFriendListSync()', function() {
-    it('should return 0 when no friends', function() {
-      tox.countFriendListSync().should.equal(0);
+  // @todo: Address check
+  describe('nospam', function() {
+    it('should be a number', function() {
+      tox.getNospamSync().should.be.a.Number;
     });
-  });
 
-  describe('#getAddress()', function() {
-    it('should return a Buffer of the expected size in callback', function(done) {
-      tox.getAddress(function(err, address) {
-        address.length.should.equal(38); // TOX_FRIEND_ADDRESS_SIZE
+    it('should be a number (async)', function(done) {
+      tox.getNospam(function(err, nospam) {
+        nospam.should.be.a.Number;
+        done(err);
+      });
+    });
+
+    it('should set a number', function() {
+      var nospam = 0x1234;
+      tox.setNospamSync(nospam);
+      tox.getNospamSync().should.equal(nospam);
+    });
+
+    it('should set a number (async)', function(done) {
+      var nospam = 0x9876;
+      async.series([
+        Tox.prototype.setNospam.bind(tox, nospam),
+        Tox.prototype.getNospam.bind(tox)
+      ], function(err, results) {
+        results[1].should.equal(nospam);
         done(err);
       });
     });
   });
 
-  describe('#getAddressSync()', function() {
-    it('should return a Buffer of the expected size', function() {
-      tox.getAddressSync().length.should.equal(38);
+  describe('ToxOptions', function() {
+    it('should allocate and free', function() {
+      var opts = tox.newOptionsSync();
+      tox.freeOptionsSync(opts);
     });
-  });
 
-  describe('#getAddressHex()', function() {
-    it('should return a hex string of the expected size in callback', function(done) {
-      tox.getAddressHex(function(err, address) {
-        address.should.match(addressHexStringRegex);
-        done(err);
+    it('should allocate and free (async)', function(done) {
+      tox.newOptions(function(err, opts) {
+        if(!err) {
+          tox.freeOptions(opts, function(err) {
+            done(err);
+          });
+        } else done(err);
       });
     });
   });
 
-  describe('#getAddressHexSync()', function() {
-    it('should return a hex string of the expected size', function() {
-      tox.getAddressHexSync().should.match(addressHexStringRegex);
-    });
-  });
-
-  describe('#getFriendList()', function() {
-    it('should return an empty array in callback when no friends', function(done) {
-      tox.getFriendList(function(err, friends) {
-        friends.length.should.equal(0);
-        done(err);
-      });
-    });
-  });
-
-  describe('#getFriendListSync()', function() {
-    it('should return an empty array when no friends', function() {
-      tox.getFriendListSync().length.should.equal(0);
-    });
-  });
-
-  describe('#getKeys()', function() {
-    it('should return keys with expected lengths in callback', function(done) {
-      tox.getKeys(true, function(err, pubkey, privkey) {
-        privkey.length.should.equal(32);
-        pubkey.length.should.equal(32);
-        done(err);
-      });
+  describe('self key functions', function() {
+    it('should get the public key', function() {
+      var key = tox.getPublicKeySync();
+      key.length.should.equal(consts.TOX_PUBLIC_KEY_SIZE);
     });
 
-    it('should only return public key in callback if specified', function(done) {
-      tox.getKeys(false, function(err, pubkey, privkey) {
-        should.exist(pubkey);
-        should.not.exist(privkey);
-        done(err);
-      });
-    });
-  });
-
-  describe('#getKeysSync()', function() {
-    it('should return keys with expected lengths', function() {
-      var keys = tox.getKeysSync(true);
-      keys.length.should.equal(2);
-      keys.forEach(function(key) {
-        key.length.should.equal(32);
-      });
-    });
-
-    it('should only return public key if specified', function() {
-      var keys = tox.getKeysSync(false);
-      keys.length.should.equal(1);
-      keys[0].length.should.equal(32);
-    });
-  });
-
-  describe('#getPrivateKey()', function() {
-    it('should return a Buffer of the expected size in callback', function(done) {
-      tox.getPrivateKey(function(err, key) {
-        key.length.should.equal(32); // TOX_CLIENT_ID_SIZE
-        done(err);
-      });
-    });
-  });
-
-  describe('#getPrivateKeySync()', function() {
-    it('should return a Buffer of the expected size', function() {
-      tox.getPrivateKeySync().length.should.equal(32);
-    });
-  });
-
-  describe('#getPrivateKeyHex()', function() {
-    it('should return a hex string of the expected size in callback', function(done) {
-      tox.getPrivateKeyHex(function(err, key) {
-        key.should.match(keyHexStringRegex);
-        done(err);
-      });
-    });
-  });
-
-  describe('#getPrivateKeyHexSync()', function() {
-    it('should return a hex string of the expected size', function() {
-      tox.getPrivateKeyHexSync().should.match(keyHexStringRegex);
-    });
-  });
-
-  describe('#getPublicKey()', function() {
-    it('should return a Buffer of the expected size in callback', function(done) {
+    it('should get the public key (async)', function(done) {
       tox.getPublicKey(function(err, key) {
-        key.length.should.equal(32); // TOX_CLIENT_ID_SIZE
-        done(err);
-      });
-    });
-  });
-
-  describe('#getPublicKeySync()', function() {
-    it('should return a Buffer of the expected size', function() {
-      tox.getPublicKeySync().length.should.equal(32);
-    });
-  });
-
-  describe('#getPublicKeyHex()', function() {
-    it('should return a hex string of the expected size in callback', function(done) {
-      tox.getPublicKeyHex(function(err, key) {
-        key.should.match(keyHexStringRegex);
-        done(err);
-      });
-    });
-  });
-
-  describe('#getPublicKeyHexSync()', function() {
-    it('should return a hex string of the expected size', function() {
-      tox.getPublicKeyHexSync().should.match(keyHexStringRegex);
-    });
-  });
-
-  describe('#hasFriend()', function() {
-    it('should return false in callback if not added', function(done) {
-      tox.hasFriend(0, function(err, res) {
-        res.should.be.false;
-        done(err);
-      });
-    });
-  });
-
-  describe('#hasFriendSync()', function() {
-    it('should return false if not added', function() {
-      tox.hasFriendSync(0).should.be.false;
-    });
-  });
-
-  describe('#hasHandle()', function() {
-    it('should return true if a tox handle is present', function() {
-      tox.hasHandle().should.be.true;
-    });
-
-    it('should return false if no tox handle is present', function() {
-      toxWithoutHandle.hasHandle().should.be.false;
-    });
-  });
-
-  describe('#hash()', function() {
-    it('should correctly hash a Buffer', function(done) {
-      tox.hash(new Buffer('abc'), function(err, hash) {
-        hash.toHex().toLowerCase().should.equal(abcHashed);
+        key.length.should.equal(consts.TOX_PUBLIC_KEY_SIZE);
         done(err);
       });
     });
 
-    it('should correctly hash a String', function(done) {
-      tox.hash('abc', function(err, hash) {
-        hash.toHex().toLowerCase().should.equal(abcHashed);
+    it('should get the public key as hex', function() {
+      var keyHex = tox.getPublicKeyHexSync();
+      keyHex.length.should.equal(consts.TOX_PUBLIC_KEY_SIZE * 2);
+    });
+
+    it('should get the public key as hex (async)', function(done) {
+      tox.getPublicKeyHex(function(err, keyHex) {
+        keyHex.length.should.equal(consts.TOX_PUBLIC_KEY_SIZE * 2);
         done(err);
       });
     });
-  });
 
-  describe('#hashSync()', function() {
-    it('should correctly hash a Buffer', function() {
-      tox.hashSync(new Buffer('abc')).toHex().toLowerCase().should.equal(abcHashed);
+    it('should get the secret key', function() {
+      var key = tox.getSecretKeySync();
+      key.length.should.equal(consts.TOX_SECRET_KEY_SIZE);
     });
 
-    it('should correctly hash a String', function() {
-      tox.hashSync('abc').toHex().toLowerCase().should.equal(abcHashed);
-    });
-  });
-
-  describe('#kill()', function() {
-    it('should clear handle after killing', function(done) {
-      var temp = new toxcore.Tox();
-      temp.kill(function(err) {
-        temp.hasHandle().should.be.false;
+    it('should get the secret key (async)', function(done) {
+      tox.getSecretKey(function(err, key) {
+        key.length.should.equal(consts.TOX_SECRET_KEY_SIZE);
         done(err);
       });
     });
-  });
 
-  describe('#killSync()', function() {
-    it('should clear handle after killing', function() {
-      var temp = new toxcore.Tox();
-      temp.killSync();
-      temp.hasHandle().should.be.false;
+    it('should get the secret key as hex', function() {
+      var keyHex = tox.getSecretKeyHexSync();
+      keyHex.length.should.equal(consts.TOX_SECRET_KEY_SIZE * 2);
     });
-  });
 
-  describe('#size()', function() {
-    it('should return a positive integer in callback', function(done) {
-      tox.size(function(err, size) {
-        size.should.be.above(0);
+    it('should get the secret key as hex (async)', function(done) {
+      tox.getSecretKeyHex(function(err, keyHex) {
+        keyHex.length.should.equal(consts.TOX_SECRET_KEY_SIZE * 2);
         done(err);
       });
-    });
-  });
-
-  describe('#sizeSync()', function() {
-    it('should return a positive integer', function() {
-      tox.sizeSync().should.be.above(0);
-    });
-  });
-
-  describe('#getAV()', function() {
-    it('should return a ToxAV object if Tox constructed with no parameters', function() {
-      should.exist(tox.getAV());
-    });
-
-    it('should return undefined if Tox constructed with opts { av: false }', function() {
-      var toxNoAV = new toxcore.Tox({ av: false });
-      should.not.exist(toxNoAV.getAV());
-    });
-
-    it('should return a ToxAV object if Tox constructed with opts { av: true }', function() {
-      var toxWithAV = new toxcore.Tox({ av: true });
-      should.exist(toxWithAV.getAV());
     });
   });
 });

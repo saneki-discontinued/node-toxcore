@@ -18,7 +18,7 @@
  *
  */
 
-var toxcore = require('toxcore').new;
+var toxcore = require('toxcore');
 var tox = new toxcore.Tox({ old: true });
 var groupnum = -1;
 
