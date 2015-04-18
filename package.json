@@ -1,6 +1,6 @@
 {
   "name": "toxcore",
-  "version": "0.0.18",
+  "version": "1.0.0",
   "description": "Node bindings for libtoxcore",
   "keywords": ["im", "libtoxcore", "node-toxcore", "skype", "tox", "toxcore"],
   "license": "GPL-3.0",
@@ -20,7 +20,7 @@
   },
 
   "scripts": {
-    "test": "mocha && mocha -t 300000 test/slow"
+    "test": "mocha"
   },
 
   "dependencies": {
