@@ -57,8 +57,8 @@ declare module 'toxcore' {
   }
 
   export class Tox {
-    new();
-    new(opts?: ToxConstructorOptions);
+    constructor();
+    constructor(opts?: ToxConstructorOptions);
     checkHandle(callback?: ErrorCallback): boolean;
     checkHandleSync(): void;
     clearHandle(): void;
@@ -213,7 +213,7 @@ declare module 'toxcore' {
   }
 
   export class ToxAV {
-    new(tox: Tox, opts?: ToxAVConstructorOptions);
+    constructor(tox: Tox, opts?: ToxAVConstructorOptions);
     getTox(): Tox;
     addGroupchat(callback?: NumberCallback): void;
     addGroupchatSync(): number;
@@ -222,7 +222,7 @@ declare module 'toxcore' {
   }
 
   export class ToxDns {
-    new(opts?: ToxDnsConstructorOptions);
+    constructor(opts?: ToxDnsConstructorOptions);
     kill(callback?: ErrorCallback): void;
     killSync(): void;
     generateString(name: string, callback?: Function): void; // Todo: fix
@@ -230,7 +230,7 @@ declare module 'toxcore' {
   }
 
   export class ToxEncryptSave {
-    new(tox: Tox, opts?: ToxEncryptSaveConstructorOptions);
+    constructor(tox: Tox, opts?: ToxEncryptSaveConstructorOptions);
     getEncryptionExtraLength(callback?: NumberCallback): void;
     getEncryptionExtraLengthSync(): number;
     getKeyLength(callback?: NumberCallback): void;
@@ -271,7 +271,7 @@ declare module 'toxcore' {
   // @todo: Greatly improve this...
 
   export class NewApiTox {
-    new();
+    constructor();
     bootstrapSync(address: string, port: number, publicKey: Buffer): void;
     bootstrapSync(address: string, port: number, publicKey: string): void;
     isStarted(): boolean;
