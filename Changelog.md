@@ -1,6 +1,10 @@
 Changelog
 =========
 
+v1.0.1
+------
+- Updated typescript definitions file.
+
 v1.0.0
 ------
 - Dropped support for old api in support of new api.
