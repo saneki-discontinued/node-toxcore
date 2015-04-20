@@ -1,6 +1,4 @@
-/**
- * node-toxcore (new_api) async example with bluebird promises.
- *
+/*
  * This file is part of node-toxcore.
  *
  * node-toxcore is free software: you can redistribute it and/or modify
@@ -16,6 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with node-toxcore. If not, see <http://www.gnu.org/licenses/>.
  *
+ */
+
+/**
+ * node-toxcore (new_api) async example with bluebird promises.
  */
 
 var async = require('async');

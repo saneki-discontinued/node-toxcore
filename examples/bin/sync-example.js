@@ -1,6 +1,4 @@
-/**
- * A tiny tox bot example using node-toxcore's synchronous methods (new_api).
- *
+/*
  * This file is part of node-toxcore.
  *
  * node-toxcore is free software: you can redistribute it and/or modify
@@ -16,6 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with node-toxcore. If not, see <http://www.gnu.org/licenses/>.
  *
+ */
+
+/**
+ * A tiny tox bot example using node-toxcore's synchronous methods (new_api).
  */
 
 var toxcore = require('toxcore');

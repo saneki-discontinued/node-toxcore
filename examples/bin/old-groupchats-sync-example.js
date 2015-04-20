@@ -1,6 +1,4 @@
-/**
- * Tox bot displaying node-toxcore usage of old groupchats.
- *
+/*
  * This file is part of node-toxcore.
  *
  * node-toxcore is free software: you can redistribute it and/or modify
@@ -16,6 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with node-toxcore. If not, see <http://www.gnu.org/licenses/>.
  *
+ */
+
+/**
+ * Tox bot displaying node-toxcore usage of old groupchats.
  */
 
 var toxcore = require('toxcore');
