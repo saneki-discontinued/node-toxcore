@@ -19,12 +19,17 @@
 var assert = require('assert');
 var async = require('async');
 var buffertools = require('buffertools');
+var fs = require('fs');
+var mktemp = require('mktemp');
 var should = require('should');
 var path = require('path');
 var Tox = require(path.join(__dirname, '..', 'lib', 'tox'));
 var consts = require(path.join(__dirname, '..', 'lib', 'consts'));
 
 buffertools.extend();
+
+// Helper mktemp functions
+var mktempToxSync = mktemp.createFileSync.bind(undefined, 'XXXXX.tox');
 
 // @todo: Cleanup (kill tox instances afterwards)
 describe('Tox', function() {
@@ -542,6 +547,54 @@ describe('Tox', function() {
         keyHex.length.should.equal(consts.TOX_SECRET_KEY_SIZE * 2);
         done(err);
       });
+    });
+  });
+
+  describe('saving and loading', function() {
+    var toxToSave = new Tox(),
+        address = toxToSave.getAddressHexSync().toUpperCase();
+
+    it('should save and be loaded', function() {
+      var data = toxToSave.getSavedataSync(),
+          toxToLoad = new Tox({ data: data });
+      toxToLoad.getAddressHexSync().toUpperCase().should.equal(address);
+      toxToLoad.free();
+    });
+
+    it('should save and be loaded (async)', function(done) {
+      toxToSave.getSavedata(function(err, data) {
+        var toxToLoad = new Tox({ data: data });
+        toxToLoad.getAddressHexSync().toUpperCase().should.equal(address);
+        toxToLoad.free();
+        done(err);
+      });
+    });
+
+    it('should save and be loaded from file', function() {
+      var temp = mktempToxSync();
+      toxToSave.saveToFileSync(temp);
+      var toxToLoad = new Tox({ data: temp });
+      toxToLoad.getAddressHexSync().toUpperCase().should.equal(address);
+      toxToLoad.free();
+      fs.unlinkSync(temp); // Remove file
+    });
+
+    // @todo Implement with async load
+    it('should save and be loaded from file (async)', function(done) {
+      var temp = mktempToxSync();
+      toxToSave.saveToFile(temp, function(err) {
+        if(!err) {
+          var toxToLoad = new Tox({ data: temp });
+          toxToLoad.getAddressHexSync().toUpperCase().should.equal(address);
+          toxToLoad.free();
+          fs.unlinkSync(temp);
+          done();
+        } else done(err);
+      });
+    });
+
+    after(function() {
+      toxToSave.free();
     });
   });
 });
