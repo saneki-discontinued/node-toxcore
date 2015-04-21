@@ -1,6 +1,15 @@
 Changelog
 =========
 
+v1.0.2
+------
+- Added Tox.load() for asynchronously creating a Tox object.
+- Added 'data' option for Tox construction, which specifies the data to load
+  as either a Buffer or a filepath (string). If given a filepath, this will
+  read the file synchronously if (new Tox()) is used, and asynchronously if
+  Tox.load() is used.
+- Added Tox#saveToFile(), Tox#saveToFileSync() for saving state to a file.
+
 v1.0.1
 ------
 - Updated typescript definitions file.
