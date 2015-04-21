@@ -579,16 +579,18 @@ describe('Tox', function() {
       fs.unlinkSync(temp); // Remove file
     });
 
-    // @todo Implement with async load
     it('should save and be loaded from file (async)', function(done) {
       var temp = mktempToxSync();
       toxToSave.saveToFile(temp, function(err) {
         if(!err) {
-          var toxToLoad = new Tox({ data: temp });
-          toxToLoad.getAddressHexSync().toUpperCase().should.equal(address);
-          toxToLoad.free();
-          fs.unlinkSync(temp);
-          done();
+          Tox.load({ data: temp }, function(err, toxToLoad) {
+            if(!err) {
+              toxToLoad.getAddressHexSync().toUpperCase().should.equal(address);
+              toxToLoad.free();
+              fs.unlinkSync(temp);
+              done();
+            } else done(err);
+          });
         } else done(err);
       });
     });
