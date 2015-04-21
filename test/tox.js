@@ -587,9 +587,9 @@ describe('Tox', function() {
             if(!err) {
               toxToLoad.getAddressHexSync().toUpperCase().should.equal(address);
               toxToLoad.free();
-              fs.unlinkSync(temp);
-              done();
-            } else done(err);
+            }
+            fs.unlinkSync(temp);
+            done(err);
           });
         } else done(err);
       });
