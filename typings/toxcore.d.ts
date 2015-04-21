@@ -9,6 +9,7 @@ declare module 'toxcore' {
 
   interface ToxConstructorOptions {
     path?: string;
+    data?: Buffer; // (Buffer|string)
   }
 
   interface ToxOldConstructorOptions {
@@ -48,9 +49,16 @@ declare module 'toxcore' {
     (err?: Error, list?: string[]): void;
   }
 
+  interface ToxCallback {
+    (err: Error, tox?: Tox): void;
+  }
+
   // Leaving out freeOptions/newOptions functions
   export class Tox {
     constructor(opts?: ToxConstructorOptions);
+    static load(opts: ToxConstructorOptions, callback: ToxCallback): void;
+    static load(callback: ToxCallback): void;
+
     createLibrary(libpath?: string): any; // ffi.Library
     free(): void;
     // getEmitter(): EventEmitter; // Add later?
@@ -63,6 +71,8 @@ declare module 'toxcore' {
     old(): ToxOld; // May also return undefined
     off(name: string, callback: Function): void;
     on(name: string, callback?: Function): void;
+    saveToFile(filepath: string, callback?: ErrorCallback): void;
+    saveToFileSync(filepath: string): void;
     start(wait?: number): void;
     stop(): void;
 
