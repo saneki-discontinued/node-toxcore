@@ -18,39 +18,39 @@ declare module 'toxcore' {
   }
 
   interface ErrorCallback {
-    (err?: Error): void;
+    (err: Error): void;
   }
 
-  interface BooleanCallback extends ErrorCallback {
-    (err?: Error, val?: boolean): void;
+  interface BooleanCallback {
+    (err: Error, val: boolean): void;
   }
 
-  interface BufferCallback extends ErrorCallback {
-    (err?: Error, val?: Buffer): void;
+  interface BufferCallback {
+    (err: Error, val: Buffer): void;
   }
 
-  interface DateCallback extends ErrorCallback {
-    (err?: Error, val?: Date): void;
+  interface DateCallback {
+    (err: Error, val: Date): void;
   }
 
-  interface NumberCallback extends ErrorCallback {
-    (err?: Error, val?: number): void;
+  interface NumberCallback {
+    (err: Error, val: number): void;
   }
 
-  interface StringCallback extends ErrorCallback {
-    (err?: Error, val?: string): void;
+  interface StringCallback {
+    (err: Error, val: string): void;
   }
 
-  interface NumberArrayCallback extends ErrorCallback {
-    (err?: Error, list?: number[]): void;
+  interface NumberArrayCallback {
+    (err: Error, list: number[]): void;
   }
 
-  interface StringArrayCallback extends ErrorCallback {
-    (err?: Error, list?: string[]): void;
+  interface StringArrayCallback {
+    (err: Error, list: string[]): void;
   }
 
   interface ToxCallback {
-    (err: Error, tox?: Tox): void;
+    (err: Error, tox: Tox): void;
   }
 
   // Leaving out freeOptions/newOptions functions
