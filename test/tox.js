@@ -599,4 +599,34 @@ describe('Tox', function() {
       toxToSave.free();
     });
   });
+
+  describe('hashing', function() {
+    it('should hash some data', function() {
+      var hash = tox.hashSync(new Buffer([0, 1, 2, 3]));
+      hash.length.should.equal(consts.TOX_HASH_LENGTH);
+    });
+
+    it('should hash some data (async)', function(done) {
+      tox.hash(new Buffer([0, 1, 2, 3]), function(err, hash) {
+        if(!err) {
+          hash.length.should.equal(consts.TOX_HASH_LENGTH);
+          done();
+        } else done(err);
+      });
+    });
+
+    it('should hash some string', function() {
+      var hash = tox.hashSync('aaa');
+      hash.length.should.equal(consts.TOX_HASH_LENGTH);
+    });
+
+    it('should hash some string (async)', function(done) {
+      tox.hash('aaa', function(err, hash) {
+        if(!err) {
+          hash.length.should.equal(consts.TOX_HASH_LENGTH);
+          done();
+        } else done(err);
+      });
+    });
+  });
 });
