@@ -629,4 +629,22 @@ describe('Tox', function() {
       });
     });
   });
+
+  describe('file control name to value', function() {
+    it('should convert from control name to control value correctly', function() {
+      var RESUME = consts.TOX_FILE_CONTROL_RESUME,
+          PAUSE = consts.TOX_FILE_CONTROL_PAUSE,
+          CANCEL = consts.TOX_FILE_CONTROL_CANCEL;
+
+      tox._fixFileControl('resume').should.equal(RESUME);
+      tox._fixFileControl('Resume').should.equal(RESUME);
+      tox._fixFileControl('RESUME').should.equal(RESUME);
+      tox._fixFileControl('pause').should.equal(PAUSE);
+      tox._fixFileControl('Pause').should.equal(PAUSE);
+      tox._fixFileControl('PAUSE').should.equal(PAUSE);
+      tox._fixFileControl('cancel').should.equal(CANCEL);
+      tox._fixFileControl('Cancel').should.equal(CANCEL);
+      tox._fixFileControl('CANCEL').should.equal(CANCEL);
+    });
+  });
 });
