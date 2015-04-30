@@ -40,18 +40,6 @@ var SEEK_SET = 0,
     SEEK_CUR = 1,
     SEEK_END = 2;
 
-var getControlName = function(control) {
-  if(control === RESUME) {
-    return 'RESUME';
-  } else if(control === PAUSE) {
-    return 'PAUSE';
-  } else if(control === CANCEL) {
-    return 'CANCEL';
-  } else {
-    return 'UNKNOWN (' + control + ')';
-  }
-};
-
 /**
  * Fix a filename by replacing all path separators with _.
  * @param {String} filename - Filename to fix
@@ -95,10 +83,10 @@ tox.on('friendRequest', function(e) {
 tox.on('fileRecvControl', function(e) {
   console.log('Received file control from %d: %s',
     e.friend(),
-    getControlName(e.control()));
+    e.controlName());
 
   // If cancel, release resources (close file)
-  if(e.control() === CANCEL) {
+  if(e.isCancel()) {
     var fd = files[e.file()];
     if(descriptor !== undefined) {
       fs.closeSync(fd);
@@ -130,15 +118,15 @@ tox.on('fileRecv', function(e) {
       files[e.file()] = fd;
 
       // Tell sender we're ready to start the transfer
-      tox.controlFileSync(e.friend(), e.file(), RESUME);
+      tox.controlFileSync(e.friend(), e.file(), 'resume');
     } else {
       console.log('Fixed filename is empty string (original: %s)', e.filename());
-      tox.controlFileSync(e.friend(), e.file(), CANCEL);
+      tox.controlFileSync(e.friend(), e.file(), 'cancel');
     }
   } else {
     // If not a data file (avatar), cancel
     console.log('File is avatar, ignoring');
-    tox.controlFileSync(e.friend(), e.file(), CANCEL);
+    tox.controlFileSync(e.friend(), e.file(), 'cancel');
   }
 });
 
