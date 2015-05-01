@@ -92,6 +92,9 @@ declare module 'toxcore' {
     bootstrap(address: string, port: number, publicKey: Buffer, callback?: ErrorCallback): void;
     bootstrapSync(address: string, port: number, publicKey: string): void;
     bootstrapSync(address: string, port: number, publicKey: Buffer): void;
+    // todo: control: (number|string)
+    controlFile(friendnum: number, filenum: number, control: number, callback?: ErrorCallback): void;
+    controlFileSync(friendnum: number, filenum: number, control: number): void;
     deleteFriend(friendnum: number, callback?: ErrorCallback): void;
     deleteFriendSync(friendnum: number): void;
     getAddress(callback?: BufferCallback): void;
@@ -100,6 +103,8 @@ declare module 'toxcore' {
     getAddressHexSync(): string;
     getConnectionStatus(callback?: NumberCallback): void;
     getConnectionStatusSync(): number;
+    getFileId(friendnum: number, filenum: number, callback?: BufferCallback): void;
+    getFileIdSync(friendnum: number, filenum: number): Buffer;
     getFriendByPublicKey(publicKey: Buffer, callback?: NumberCallback): void;
     getFriendByPublicKey(publicKey: string, callback?: NumberCallback): void;
     getFriendByPublicKeySync(publicKey: Buffer): number;
@@ -168,6 +173,13 @@ declare module 'toxcore' {
     killSync(): void;
     //saveToFile(filepath: string, callback?: ErrorCallback): void;
     //saveToFileSync(filepath: string): void;
+    seekFile(friendnum: number, filenum: number, position: number, callback?: ErrorCallback): void;
+    seekFileSync(friendnum: number, filenum: number, position: number): void;
+    // Todo: fileid should be optional
+    sendFile(friendnum: number, kind: number, filename: string, size: number, fileid: Buffer, callback?: NumberCallback): void;
+    sendFileSync(friendnum: number, kind: number, filename: string, size: number, fileid: Buffer): number;
+    sendFileChunk(friendnum: number, filenum: number, position: number, data: Buffer, callback?: ErrorCallback): void;
+    sendFileChunkSync(friendnum: number, filenum: number, position: number, data: Buffer): void;
     // Todo: Support more than just string 'type' for sendFriendMessage
     sendFriendMessage(friendnum: number, message: string, callback?: NumberCallback): void;
     sendFriendMessage(friendnum: number, message: string, type: string, callback?: NumberCallback): void;
