@@ -647,4 +647,16 @@ describe('Tox', function() {
       tox._fixFileControl('CANCEL').should.equal(CANCEL);
     });
   });
+
+  describe('event emitter', function() {
+    it('should be gettable from a Tox instance', function() {
+      should.exist(tox.getEmitter());
+    });
+
+    it('should be gettable from a ToxOld instance', function() {
+      var toxWithOld = new Tox({ old: true });
+      should.exist(toxWithOld.getEmitter());
+      toxWithOld.free();
+    });
+  });
 });
