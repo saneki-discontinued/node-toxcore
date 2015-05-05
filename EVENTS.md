@@ -11,25 +11,18 @@ information, such as `var friendNumber = e.friend();`
 Tox
 ---
 
-Name                | Event object name        | Description
-------------------- | :----------------------: | ------------------------------------------------------
-avatarData          | AvatarDataEvent          | Emitted when avatar data is received.
-avatarInfo          | AvatarInfoEvent          | Emitted when avatar info is received.
-connectionStatus    | ConnectionStatusEvent    | Emitted when a friend's connection status changes.
-fileControl         | FileControlEvent         | Emitted when file control info is received.
-fileData            | FileDataEvent            | Emitted when file data is received.
-fileSendRequest     | FileSendRequestEvent     | Emitted when someone requests to send a file.
-friendAction        | FriendActionEvent        | Emitted when a friend action (/me message).
-friendMessage       | FriendMessageEvent       | Emitted when a friend message is received.
-friendRequest       | FriendRequestEvent       | Emitted when a friend request is received.
-groupAction         | GroupActionEvent         | Emitted when a group action is received (/me message).
-groupInvite         | GroupInviteEvent         | Emitted when invited to a group.
-groupMessage        | GroupMessageEvent        | Emitted when a group message is received.
-groupNamelistChange | GroupNamelistChangeEvent | Emitted when a group's namelist changes.
-groupTitle          | GroupTitleEvent          | Emitted when a group's title changes.
-nameChange          | NameChangeEvent          | Emitted when a friend's name changes.
-readReceipt         | ReadReceiptEvent         | Emitted when a receipt is received.
-statusMessage       | StatusMessageEvent       | Emitted when a friend's status message changes.
-typingChange        | TypingChangeEvent        | Emitted when a friend's typing status changes.
-userStatus          | UserStatusEvent          | Emitted when a friend's user status changes.
-
+Name                   | Event object name           | Description
+---------------------- | :-------------------------: | ---------------------------------------------------------
+fileRecvControl        | FileRecvControlEvent        | Emitted when a file control is received.
+fileChunkRequest       | FileChunkRequestEvent       | Emitted when a chunk of a file has been requested.
+fileRecv               | FileRecvEvent               | Emitted when someone requests to send a file.
+fileRecvChunk          | FileRecvChunkEvent          | Emitted when a chunk is received during a file transfer.
+friendConnectionStatus | FriendConnectionStatusEvent | Emitted when a friend's connection status has changed.
+friendMessage          | FriendMessageEvent          | Emitted when a friend message is received.
+friendName             | FriendNameEvent             | Emitted when a friend's name has changed.
+friendReadReceipt      | FriendReadReceiptEvent      | Emitted when a friend receipt is received.
+friendRequest          | FriendRequestEvent          | Emitted when a friend request is received.
+friendStatus           | FriendStatusEvent           | Emitted when a friend's status has changed.
+friendStatusMessage    | FriendStatusMessageEvent    | Emitted when a friend's status message has changed.
+friendTyping           | FriendTypingEvent           | Emitted when a friend's typing status has changed.
+selfConnectionStatus   | SelfConnectionStatusEvent   | Emitted when our connection status has changed.
