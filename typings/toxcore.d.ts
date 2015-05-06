@@ -61,7 +61,7 @@ declare module 'toxcore' {
 
     createLibrary(libpath?: string): any; // ffi.Library
     free(): void;
-    // getEmitter(): EventEmitter; // Add later?
+    getEmitter(): EventEmitter;
     getHandle(): any;
     getLibrary(): any; // ffi.Library
     hasHandle(): boolean;
@@ -209,7 +209,7 @@ declare module 'toxcore' {
   export class ToxOld {
     constructor(opts?: ToxOldConstructorOptions);
     createLibrary(libpath?: string): any; // ffi.Library
-    // getEmitter(): EventEmitter; // Add later?
+    getEmitter(): EventEmitter;
     getHandle(): any;
     getLibrary(): any; // ffi.Library
     hasHandle(): boolean;
