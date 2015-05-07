@@ -50,6 +50,12 @@ tox.on('friendRequest', function(e) {
   console.log('Friend request from: ' + e.publicKeyHex());
 });
 
+// Print received friend messages to console
+tox.on('friendMessage', function(e) {
+  var friendName = tox.getFriendNameSync(e.friend());
+  console.log(friendName + ': ' + e.message());
+});
+
 // Print out your tox address so others can add it
 console.log('Address: ' + tox.getAddressHexSync());
 
