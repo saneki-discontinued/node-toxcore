@@ -639,12 +639,15 @@ describe('Tox', function() {
       tox._fixFileControl('resume').should.equal(RESUME);
       tox._fixFileControl('Resume').should.equal(RESUME);
       tox._fixFileControl('RESUME').should.equal(RESUME);
+      tox._fixFileControl(RESUME).should.equal(RESUME);
       tox._fixFileControl('pause').should.equal(PAUSE);
       tox._fixFileControl('Pause').should.equal(PAUSE);
       tox._fixFileControl('PAUSE').should.equal(PAUSE);
+      tox._fixFileControl(PAUSE).should.equal(PAUSE);
       tox._fixFileControl('cancel').should.equal(CANCEL);
       tox._fixFileControl('Cancel').should.equal(CANCEL);
       tox._fixFileControl('CANCEL').should.equal(CANCEL);
+      tox._fixFileControl(CANCEL).should.equal(CANCEL);
     });
   });
 
