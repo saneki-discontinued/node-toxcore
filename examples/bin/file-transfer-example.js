@@ -24,6 +24,7 @@ var fs = require('fs-ext');
 var path = require('path');
 var mkdirp = require('mkdirp');
 var toxcore = require('toxcore');
+var util = require('util');
 var tox = new toxcore.Tox();
 var consts = toxcore.Consts;
 
@@ -32,9 +33,25 @@ var files = {};
 
 var uploadPath = path.normalize(path.join(__dirname, '..', 'tmp'));
 
+var sendPath = 'file.txt'; // Test file to send
+var sendSize = 0;
+var sendFile = undefined; // Opened file
+
+try {
+  sendFile = fs.openSync(sendPath, 'r');
+  var stat = fs.statSync(sendPath);
+  sendSize = stat.size;
+  console.log('Initialized file to send (path=%s, size=%d)', sendPath, sendSize);
+} catch(e) {
+  console.error(e);
+}
+
 var CANCEL = consts.TOX_FILE_CONTROL_CANCEL,
     PAUSE = consts.TOX_FILE_CONTROL_PAUSE,
     RESUME = consts.TOX_FILE_CONTROL_RESUME;
+
+var DATA = consts.TOX_FILE_KIND_DATA,
+    AVATAR = consts.TOX_FILE_KIND_AVATAR;
 
 var SEEK_SET = 0,
     SEEK_CUR = 1,
@@ -80,6 +97,16 @@ tox.on('friendRequest', function(e) {
   tox.addFriendNoRequestSync(e.publicKey());
 });
 
+tox.on('friendMessage', function(e) {
+  console.log('Received message (friend=%d, message=%s)', e.friend(), e.message());
+  if(/^send$/i.test(e.message())) {
+    if(sendFile !== undefined) {
+      console.log('Beginning send (friend=%d)', e.friend());
+      tox.sendFileSync(e.friend(), DATA, sendPath, sendSize);
+    }
+  }
+});
+
 tox.on('fileRecvControl', function(e) {
   console.log('Received file control from %d: %s',
     e.friend(),
@@ -96,11 +123,32 @@ tox.on('fileRecvControl', function(e) {
 });
 
 tox.on('fileChunkRequest', function(e) {
-  // Todo
+  if(sendFile) {
+    var data = new Buffer(e.length()),
+        bytesRead = 0;
+
+    try {
+      bytesRead = fs.readSync(sendFile, data, 0, data.length, e.position());
+    } catch(err) {
+      // Expected: Out of bounds error
+      console.log('Position out-of-bounds, sending nothing (friend=%d)', e.friend());
+      //tox.sendFileChunkSync(e.friend(), e.file(), e.position(), new Buffer(0));
+      //console.log('DONE (1)');
+      return;
+    }
+
+    if(data.length !== bytesRead) {
+      data = data.slice(0, bytesRead);
+    }
+
+    console.log('Sending chunk (friend=%d, position=%d, size=%d)', e.friend(), e.position(), data.length);
+    tox.sendFileChunkSync(e.friend(), e.file(), e.position(), data);
+    //console.log('DONE (2)');
+  }
 });
 
 tox.on('fileRecv', function(e) {
-  if(e.kind() === consts.TOX_FILE_KIND_DATA) {
+  if(e.kind() === DATA) {
     var filename = fixRecvFilename(e.filename());
     if(filename.length > 0) {
       // Resulting path should look like:
