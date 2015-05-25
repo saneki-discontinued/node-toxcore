@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v1.1.1
+------
+- Update for toxcore api change ([8e80ced](https://github.com/irungentoo/toxcore/commit/8e80ced)).
+- Fixed Tox#getOptions() when proxy_address is NULL.
+
 v1.1.0
 ------
 - Added functions, events and consts related to transferring files.
