@@ -159,10 +159,10 @@ declare module 'toxcore' {
     getTcpPortSync(): number;
     getUdpPort(callback?: NumberCallback): void;
     getUdpPortSync(): number;
-    //hash(buf: Buffer, callback?: BufferCallback): void;
-    //hashSync(buf: Buffer): Buffer;
-    //hash(buf: string, callback?: BufferCallback): void;
-    //hashSync(buf: string): Buffer;
+    hash(buf: Buffer, callback?: BufferCallback): void;
+    hashSync(buf: Buffer): Buffer;
+    hash(buf: string, callback?: BufferCallback): void;
+    hashSync(buf: string): Buffer;
     hasFriend(friendnum: number, callback?: BooleanCallback): void;
     hasFriendSync(friendnum: number): boolean;
     iterate(callback?: ErrorCallback): void;
@@ -171,8 +171,6 @@ declare module 'toxcore' {
     iterationIntervalSync(): number;
     kill(callback?: ErrorCallback): void;
     killSync(): void;
-    //saveToFile(filepath: string, callback?: ErrorCallback): void;
-    //saveToFileSync(filepath: string): void;
     seekFile(friendnum: number, filenum: number, position: number, callback?: ErrorCallback): void;
     seekFileSync(friendnum: number, filenum: number, position: number): void;
     // Todo: fileid should be optional
