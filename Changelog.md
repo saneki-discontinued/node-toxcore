@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v1.1.0
+------
+- Added functions, events and consts related to transferring files.
+- Added hashing functions Tox#hash(), Tox#hashSync().
+
 v1.0.2
 ------
 - Added Tox.load() for asynchronously creating a Tox object.
