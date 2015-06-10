@@ -5,6 +5,8 @@ node-toxcore [![Build Status](https://img.shields.io/travis/saneki/node-toxcore.
 
 Node.js bindings for [libtoxcore], built off of [node-ffi].
 
+Note: Installing this package does not install [libtoxcore]. It is expected
+that [libtoxcore] is installed prior to using **node-toxcore**.
 
 ### New API
 
