@@ -1,6 +1,10 @@
 Changelog
 =========
 
+v1.1.2
+------
+- Fixed Tox#sendFriendMessageSync() to return message Id (credits: [mensinda]).
+
 v1.1.1
 ------
 - Update for toxcore api change ([8e80ced](https://github.com/irungentoo/toxcore/commit/8e80ced)).
