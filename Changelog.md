@@ -1,6 +1,10 @@
 Changelog
 =========
 
+v1.1.3
+------
+- Fixed assert error that occurred when inspecting a Tox object.
+
 v1.1.2
 ------
 - Fixed Tox#sendFriendMessageSync() to return message Id (credits: [mensinda]).
