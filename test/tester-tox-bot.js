@@ -161,12 +161,3 @@ function testSendLosslesPacket(friendNum){
   tox.sendLosslessPacketSync(friendNum, new Buffer("sample-test-lossles-packet"));
   console.log("#testSendLosslesPacket-completed");
 }
-
-function fixLosslessPacketMsg(msg){
-  var data = new Buffer(msg.length+1);
-  data[0]=160;//magic byte
-  for(var i=0; i < msg.length; i++){
-    data[i+1]=msg.charCodeAt(i);
-  }
-  return data;
-}
