@@ -37,12 +37,33 @@ var client = new toxcore.ToxClient({
 // Event 'bootstrap': Listen for a bootstrap event, emitted when the client
 //                    bootstraps before starting the tox_iterate interval loop.
 // e -> BootstrapClientEvent
-//   e.success() -> {Boolean}  Whether or not all nodes were successfully bootstrapped to,
-//   e.nodes()   -> {Object[]} Node objects which were successfully bootstrapped to
-//   e.failed()  -> {Object[]} Node objects which failed
-//client.on('bootstrap', function(e) {
-//  ...
-//});
+//   e.allSuccessful() -> {Boolean}  Whether or not all nodes were successfully bootstrapped to
+//   e.successful()    -> {Boolean}  Whether or not at least one node was successfully bootstrapped to
+//   e.nodes()         -> {Object[]} Node objects which were successfully bootstrapped to
+//   e.failed()        -> {Object[]} Node objects which failed
+client.on('bootstrap', function(e) {
+  e.nodes().forEach(function(node) {
+    console.log('Successfully bootstrapped from ' + node.address);
+    console.log('... with key ' + node.key);
+  });
+
+  e.failed().forEach(function(node) {
+    console.log('Failed to bootstrap from ' + node.address);
+    console.log('... with key ' + node.key);
+  });
+});
+
+// Event 'connect': Listen for (self) connectivity changes
+// e -> SelfConnectionStatusEvent
+//   e.connectionStatus() -> {Number}  Connection status value
+//   e.isConnected()      -> {Boolean} Whether or not the client is connected
+client.on('connect', function(e) {
+  if(e.isConnected()) {
+    console.log('Connected');
+  } else {
+    console.log('Disconnected');
+  }
+});
 
 // Event 'request': Listen for a friend request
 // Shortcut for client.friends().on('request', ... )
