@@ -10,6 +10,22 @@ var keyRegex = /^[0-9a-fA-F]{64}$/;
 describe('ToxClient', function() {
   var client = new ToxClient();
 
+  describe('constructor', function() {
+    it('should set the name, status message and status from a buffer', function() {
+      var anotherClient = new ToxClient({
+        name: 'A name', statusMessage: 'A message', status: 'busy'
+      });
+      anotherClient.name().should.equal('A name');
+      anotherClient.statusMessage().should.equal('A message');
+      anotherClient.status().should.equal('busy');
+    });
+
+    it('should load savedata from a buffer', function() {
+      var anotherClient = new ToxClient({ data: client.savedata() });
+      anotherClient.publicKey().should.equal(client.publicKey());
+    });
+  });
+
   describe('#address()', function() {
     it('should return the address as an upper-case hex string', function() {
       client.address().should.match(addressRegex);
@@ -57,6 +73,15 @@ describe('ToxClient', function() {
       var status = 'away';
       client.status(status);
       client.status().should.equal(status);
+    });
+
+    it('should set and get the tox status when given a case-mixed string', function() {
+      client.status('BusY');
+      client.status().should.equal('busy');
+      client.status('NONE');
+      client.status().should.equal('none');
+      client.status('aWAY');
+      client.status().should.equal('away');
     });
   });
 });
