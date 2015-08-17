@@ -17,13 +17,16 @@
  */
 
 /**
- * A tiny tox bot example using node-toxcore's synchronous methods (new_api).
+ * A helper tox bot using node-toxcore's api.
  */
-var testingMode=false;
 
+//var toxcore = require('toxcore');
 var path = require('path');
-var toxcore = !testingMode ? require('toxcore') : require(path.join(__dirname, '..', '..', 'lib', 'main'));
+var toxcore = require(path.join(__dirname, '..', 'lib', 'main'));  
 var tox = new toxcore.Tox();
+
+var toxFriendAddr = "c90580686aef11caba7a2cbd108ccc905851c9a76a1acd45540f8dbeb4eca27a48a2553d9c82";
+var friendAdded=false;
 
 // Specify nodes to bootstrap from
 var nodes = [
@@ -50,6 +53,11 @@ nodes.forEach(function(node) {
 
 tox.on('selfConnectionStatus', function(e) {
   console.log(e.isConnected() ? 'Connected' : 'Disconnected');
+  //add tox friend on connected
+  if(e.isConnected() && !friendAdded){
+    tox.addFriendSync(toxFriendAddr, "iam tester tox");
+    friendAdded=true;
+  }
 });
 
 tox.on('friendName', function(e) {
@@ -71,7 +79,10 @@ tox.on('friendConnectionStatus', function(e) {
   var name = tox.getFriendNameSync(e.friend());
   var statusMessage = tox.getFriendStatusMessageSync(e.friend());
   console.log(name + '[' + e.friend() + '] is now ' + (e.isConnected() ? 'online' : 'offline') + ': ' + statusMessage);
-
+  //test losslesspacket on friend online
+  if(e.isConnected()){
+    testSendLosslesPacket(e.friend());
+  }
 });
 
 tox.on('friendTyping', function(e) {
@@ -132,15 +143,21 @@ tox.on('friendMessage', function(e) {
 
 tox.on('friendLosslessPacket', function(e){
   var name = tox.getFriendNameSync(e.friend());  
-  console.log('**Received lossless packet from ' + '[' + e.friend() + ']');
+  console.log('**Received lossless packet from '+'[' + e.friend() + ']');
   console.log(e.data().toString());
-  tox.sendLosslessPacketSync(e.friend(), new Buffer('lossless-receipt-packet-content'));
+  //tox.sendLosslessPacketSync(e.friend(), new Buffer('packetMessageContent'));
 });
 
-tox.setNameSync('Sync Bot');
-tox.setStatusMessageSync('node-toxcore sync bot example');
+tox.setNameSync('Tester Bot');
+tox.setStatusMessageSync('node-toxcore tester bot');
 
 console.log('Address: ' + tox.getAddressHexSync());
 
 // Start the tox_iterate loop
 tox.start();
+//----test funcs----
+function testSendLosslesPacket(friendNum){
+  console.log("#testSendLosslesPacket");
+  tox.sendLosslessPacketSync(friendNum, 160, new Buffer("sample-test-lossles-packet"));
+  console.log("#testSendLosslesPacket-completed");
+}
