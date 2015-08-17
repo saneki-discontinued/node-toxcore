@@ -158,6 +158,6 @@ tox.start();
 //----test funcs----
 function testSendLosslesPacket(friendNum){
   console.log("#testSendLosslesPacket");
-  tox.sendLosslessPacketSync(friendNum, new Buffer("sample-test-lossles-packet"));
+  tox.sendLosslessPacketSync(friendNum, 160, new Buffer("sample-test-lossles-packet"));
   console.log("#testSendLosslesPacket-completed");
 }
