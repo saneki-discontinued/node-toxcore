@@ -185,9 +185,13 @@ declare module 'toxcore' {
     sendFriendMessage(friendnum: number, message: string, type: string, callback?: NumberCallback): void;
     sendFriendMessageSync(friendnum: number, message: string, type?: string): number;
     sendLosslessPacket(friendnum: number, data: Buffer, callback?: ErrorCallback): void;
+    sendLosslessPacket(friendnum: number, id: number, data: Buffer, callback?: ErrorCallback): void;
     sendLosslessPacketSync(friendnum: number, data: Buffer): void;
+    sendLosslessPacketSync(friendnum: number, id: number, data: Buffer): void;
     sendLossyPacket(friendnum: number, data: Buffer, callback?: ErrorCallback): void;
+    sendLossyPacket(friendnum: number, id: number, data: Buffer, callback?: ErrorCallback): void;
     sendLossyPacketSync(friendnum: number, data: Buffer): void;
+    sendLossyPacketSync(friendnum: number, id: number, data: Buffer): void;
     setName(name: string, callback?: ErrorCallback): void;
     setNameSync(name: string): void;
     setNospam(nospam: number, callback?: ErrorCallback): void;
