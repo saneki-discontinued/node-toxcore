@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v1.1.4
+------
+- Added lossless/lossy packet functionality (credits: [OguzhanE]).
+- Use ToxError for errors (credits: [OguzhanE]).
+
 v1.1.3
 ------
 - Fixed assert error that occurred when inspecting a Tox object.
@@ -40,3 +45,4 @@ v1.0.0
 
 [Arvius]:https://github.com/Arvius
 [mensinda]:https://github.com/mensinda
+[OguzhanE]:https://github.com/OguzhanE
