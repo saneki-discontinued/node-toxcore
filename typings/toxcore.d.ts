@@ -3,8 +3,6 @@
 // Definitions by: saneki <https://github.com/saneki>
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
 
-///<reference path="../node/node.d.ts"/>
-
 declare module 'toxcore' {
   import events = require('events');
   import EventEmitter = events.EventEmitter;
