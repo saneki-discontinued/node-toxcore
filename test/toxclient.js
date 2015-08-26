@@ -86,6 +86,14 @@ describe('ToxClient', function() {
     });
   });
 
+  describe('#nospam()', function() {
+    it('should set and get the nospam value', function() {
+      var nospam = 0x12345678;
+      client.nospam(nospam);
+      client.nospam().should.equal(nospam);
+    });
+  });
+
   describe('#status()', function() {
     it('should set and get the tox status (valid string)', function() {
       var status = 'away';
