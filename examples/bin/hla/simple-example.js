@@ -115,6 +115,34 @@ client.on('message', function(e) {
   }
 });
 
+// e -> FriendConnectionStatusClientEvent
+//   e.friend()           -> {ToxFriend} Tox friend instance
+//   e.connectionStatus() -> {Number}    Connection status value
+//   e.isConnected()      -> {Boolean}   Whether or not the client is connected
+client.friends().on('connect', function(e) {
+  console.log('Friend #%d %s', e.friend().id(), e.isConnected() ? 'connected' : 'disconnected');
+});
+
+// e -> FriendChangedClientEvent
+//   e.friend() -> {ToxFriend} Tox friend instance
+//   e.what()   -> {String}    Name of property that changed
+client.friends().on('changed', function(e) {
+  printFriend(e.friend());
+});
+
+/**
+ * Log info about a friend to the console.
+ * @param {ToxFriend} friend - Friend to log
+ */
+var printFriend = function(friend) {
+  console.log('Friend #%d:', friend.id());
+  console.log(' Name: %s', friend.name());
+  console.log(' Status Message: %s', friend.statusMessage());
+  console.log(' Status: %s', friend.status());
+  console.log(' Connection Status: %d', friend.connectionStatus());
+  console.log(' Public Key: %s', friend.publicKeyHex());
+};
+
 console.log('Address: ' + client.address());
 
 client.start();
