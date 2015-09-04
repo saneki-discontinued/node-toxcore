@@ -80,6 +80,31 @@ describe('ToxEncryptSave', function() {
         } else done(err);
       });
     });
+
+    it('should get the salt from encrypted data', function() {
+      var pass = 'somePassword',
+          data = new Buffer('some data'),
+          edata = crypto.encryptSync(data, pass),
+          salt = crypto.getSaltSync(edata);
+      salt.should.be.a.Buffer;
+      salt.length.should.equal(consts.TOX_PASS_SALT_LENGTH);
+    });
+
+    it('should get the salt from encrypted data (async)', function(done) {
+      var pass = 'somePassphrase',
+          data = new Buffer('encrypt me');
+      crypto.encrypt(data, pass, function(err, edata) {
+        if(!err) {
+          crypto.getSalt(edata, function(err, salt) {
+            if(!err) {
+              salt.should.be.a.Buffer;
+              salt.length.should.equal(consts.TOX_PASS_SALT_LENGTH);
+              done();
+            } else done(err);
+          });
+        } else done(err);
+      });
+    });
   });
 
   describe('key derivation', function() {
