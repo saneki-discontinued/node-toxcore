@@ -81,4 +81,49 @@ describe('ToxEncryptSave', function() {
       });
     });
   });
+
+  describe('key derivation', function() {
+    it('should derive a key with a random salt', function() {
+      var obj = crypto.deriveKeyFromPassSync('somePassword');
+      obj.key.should.be.a.Buffer;
+      obj.key.length.should.equal(consts.TOX_PASS_KEY_LENGTH);
+      obj.salt.should.be.a.Buffer;
+      obj.salt.length.should.equal(consts.TOX_PASS_SALT_LENGTH);
+    });
+
+    it('should derive a key with a random salt (async)', function(done) {
+      crypto.deriveKeyFromPass('somePassphrase', function(err, obj) {
+        if(!err) {
+          obj.key.should.be.a.Buffer;
+          obj.key.length.should.equal(consts.TOX_PASS_KEY_LENGTH);
+          obj.salt.should.be.a.Buffer;
+          obj.salt.length.should.equal(consts.TOX_PASS_SALT_LENGTH);
+          done();
+        } else done(err);
+      });
+    });
+
+    it('should derive a key with a given salt', function() {
+      var pass = 'somePassphrase',
+          obj = crypto.deriveKeyFromPassSync(pass),
+          otherObj = crypto.deriveKeyWithSaltSync(pass, obj.salt);
+      (obj.salt.equals(otherObj.salt)).should.be.true;
+      (obj.key.equals(otherObj.key)).should.be.true;
+    });
+
+    it('should derive a key with a given salt (async)', function(done) {
+      var pass = 'asyncPassword';
+      crypto.deriveKeyFromPass(pass, function(err, obj) {
+        if(!err) {
+          crypto.deriveKeyWithSalt(pass, obj.salt, function(err, otherObj) {
+            if(!err) {
+              (obj.salt.equals(otherObj.salt)).should.be.true;
+              (obj.key.equals(otherObj.key)).should.be.true;
+              done();
+            } else done(err);
+          });
+        } else done(err);
+      });
+    });
+  });
 });
