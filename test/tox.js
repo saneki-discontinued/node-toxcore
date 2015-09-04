@@ -24,6 +24,7 @@ var mktemp = require('mktemp');
 var should = require('should');
 var path = require('path');
 var Tox = require(path.join(__dirname, '..', 'lib', 'tox'));
+var ToxEncryptSave = require(path.join(__dirname, '..', 'lib', 'toxencryptsave'));
 var consts = require(path.join(__dirname, '..', 'lib', 'consts'));
 
 buffertools.extend();
@@ -431,6 +432,54 @@ describe('Tox', function() {
       var toxWithOld = new Tox({ old: true });
       should.exist(toxWithOld.old());
       toxWithOld.free();
+    });
+  });
+
+  describe('crypto support', function() {
+    it('should be provided by default', function() {
+      tox.hasCrypto().should.be.true;
+    });
+
+    it('should not break when the \'crypto\' option is passed to Tox constructor', function() {
+      var toxWithCrypto1 = new Tox({ crypto: true }),
+          toxWithCrypto2 = new Tox({ crypto: 'libtoxencryptsave' }),
+          toxWithCrypto3 = new Tox({ crypto: new ToxEncryptSave() }),
+          toxWithoutCrypto1 = new Tox({ crypto: false });
+      toxWithCrypto1.hasCrypto().should.be.true;
+      toxWithCrypto2.hasCrypto().should.be.true;
+      toxWithCrypto3.hasCrypto().should.be.true;
+      toxWithoutCrypto1.hasCrypto().should.be.false;
+    });
+
+    it('should automatically try to decrypt provided encrypted data, given a pass', function() {
+      var toxToSave = new Tox(),
+          address = toxToSave.getAddressHexSync(),
+          data = toxToSave.getSavedataSync(),
+          passphrase = 'helloWorld',
+          edata = toxToSave.crypto().encryptSync(data, passphrase),
+          toxEncrypted = [
+            new Tox({ data: edata, pass: passphrase }),
+            new Tox({ data: edata, pass: function() { return passphrase; } })
+          ];
+      toxEncrypted.forEach(function(tox) {
+        tox.getAddressHexSync().toUpperCase().should.equal(address.toUpperCase());
+      });
+    });
+
+    it('should throw if wrong passphrase is given', function() {
+      var toxToSave = new Tox(),
+          data = toxToSave.getSavedataSync(),
+          edata = toxToSave.crypto().encryptSync(data, 'myPassphrase');
+      // Should throw TOX_ERR_DECRYPTION_FAILED
+      (function() { new Tox({ data: edata, pass: 'notThePass' }); }).should.throw();
+    });
+
+    it('should not try to decrypt if no passphrase is given', function() {
+      var toxToSave = new Tox(),
+          data = toxToSave.getSavedataSync(),
+          edata = toxToSave.crypto().encryptSync(data, 'myPassphrase');
+      // Should throw TOX_ERR_NEW_LOAD_ENCRYPTED
+      (function() { new Tox({ data: edata }); }).should.throw();
     });
   });
 
