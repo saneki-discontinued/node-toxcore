@@ -26,6 +26,10 @@ var consts = require(path.join(__dirname, '..', 'lib', 'consts'));
 
 buffertools.extend();
 
+var toxPassKeyToObject = function(passKey) {
+  return { key: new Buffer(passKey.key), salt: new Buffer(passKey.salt) };
+};
+
 describe('ToxEncryptSave', function() {
   var crypto = new ToxEncryptSave();
 
@@ -81,6 +85,37 @@ describe('ToxEncryptSave', function() {
       });
     });
 
+    it('should be able to decrypt encrypted data from pass key', function() {
+      var passKey = crypto.deriveKeyFromPassSync('passphrase'),
+          data = new Buffer('encrypt me with a pass key struct'),
+          edata = crypto.encryptPassKeySync(data, passKey);
+
+      (edata.equals(data)).should.be.false;
+
+      var ddata = crypto.decryptPassKeySync(edata, passKey);
+
+      (ddata.equals(data)).should.be.true;
+    });
+
+    it('should be able to decrypt encrypted data from pass key (async)', function(done) {
+      var data = new Buffer('encrypt me with a pass key struct async');
+      crypto.deriveKeyFromPass('somePass', function(err, passKey) {
+        if(!err) {
+          crypto.encryptPassKey(data, passKey, function(err, edata) {
+            if(!err) {
+              (edata.equals(data)).should.be.false;
+              crypto.decryptPassKey(edata, passKey, function(err, ddata) {
+                if(!err) {
+                  (ddata.equals(data)).should.be.true;
+                  done();
+                } else done(err);
+              });
+            } else done(err);
+          });
+        } else done(err);
+      });
+    });
+
     it('should get the salt from encrypted data', function() {
       var pass = 'somePassword',
           data = new Buffer('some data'),
@@ -109,7 +144,7 @@ describe('ToxEncryptSave', function() {
 
   describe('key derivation', function() {
     it('should derive a key with a random salt', function() {
-      var obj = crypto.deriveKeyFromPassSync('somePassword');
+      var obj = toxPassKeyToObject(crypto.deriveKeyFromPassSync('somePassword'));
       obj.key.should.be.a.Buffer;
       obj.key.length.should.equal(consts.TOX_PASS_KEY_LENGTH);
       obj.salt.should.be.a.Buffer;
@@ -119,6 +154,7 @@ describe('ToxEncryptSave', function() {
     it('should derive a key with a random salt (async)', function(done) {
       crypto.deriveKeyFromPass('somePassphrase', function(err, obj) {
         if(!err) {
+          obj = toxPassKeyToObject(obj);
           obj.key.should.be.a.Buffer;
           obj.key.length.should.equal(consts.TOX_PASS_KEY_LENGTH);
           obj.salt.should.be.a.Buffer;
@@ -130,8 +166,8 @@ describe('ToxEncryptSave', function() {
 
     it('should derive a key with a given salt', function() {
       var pass = 'somePassphrase',
-          obj = crypto.deriveKeyFromPassSync(pass),
-          otherObj = crypto.deriveKeyWithSaltSync(pass, obj.salt);
+          obj = toxPassKeyToObject(crypto.deriveKeyFromPassSync(pass)),
+          otherObj = toxPassKeyToObject(crypto.deriveKeyWithSaltSync(pass, obj.salt));
       (obj.salt.equals(otherObj.salt)).should.be.true;
       (obj.key.equals(otherObj.key)).should.be.true;
     });
@@ -140,8 +176,10 @@ describe('ToxEncryptSave', function() {
       var pass = 'asyncPassword';
       crypto.deriveKeyFromPass(pass, function(err, obj) {
         if(!err) {
+          obj = toxPassKeyToObject(obj);
           crypto.deriveKeyWithSalt(pass, obj.salt, function(err, otherObj) {
             if(!err) {
+              otherObj = toxPassKeyToObject(otherObj);
               (obj.salt.equals(otherObj.salt)).should.be.true;
               (obj.key.equals(otherObj.key)).should.be.true;
               done();
