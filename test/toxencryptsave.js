@@ -18,6 +18,8 @@
 
 var assert = require('assert');
 var buffertools = require('buffertools');
+var fs = require('fs');
+var mktemp = require('mktemp');
 var path = require('path');
 var should = require('should');
 
@@ -25,6 +27,9 @@ var ToxEncryptSave = require(path.join(__dirname, '..', 'lib', 'toxencryptsave')
 var consts = require(path.join(__dirname, '..', 'lib', 'consts'));
 
 buffertools.extend();
+
+// Helper mktemp functions
+var mktempToxSync = mktemp.createFileSync.bind(undefined, 'XXXXX.tox');
 
 var toxPassKeyToObject = function(passKey) {
   return { key: new Buffer(passKey.key), salt: new Buffer(passKey.salt) };
@@ -138,6 +143,41 @@ describe('ToxEncryptSave', function() {
             } else done(err);
           });
         } else done(err);
+      });
+    });
+  });
+
+  describe('encryption and decryption (file helpers)', function() {
+    it('should encrypt and decrypt to/from files', function() {
+      var data = new Buffer('encrypt me to a file'),
+          pass = 'somePassword',
+          temp = mktempToxSync();
+      crypto.encryptFileSync(temp, data, pass);
+      var ddata = crypto.decryptFileSync(temp, pass);
+      (ddata.equals(data)).should.be.true;
+      fs.unlinkSync(temp);
+    });
+
+    it('should encrypt and decrypt to/from files (async)', function(done) {
+      var data = new Buffer('encrypt me to a file async'),
+          pass = 'somePassphrase',
+          temp = mktempToxSync();
+      crypto.encryptFile(temp, data, pass, function(err) {
+        if(!err) {
+          crypto.decryptFile(temp, pass, function(err, ddata) {
+            if(!err) {
+              (ddata.equals(data)).should.be.true;
+              fs.unlinkSync(temp);
+              done();
+            } else {
+              fs.unlinkSync(temp);
+              done(err);
+            }
+          });
+        } else {
+          fs.unlinkSync(temp);
+          done(err);
+        }
       });
     });
   });
