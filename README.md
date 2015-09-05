@@ -21,7 +21,7 @@ have bugs or not support certain things.
 - [x] toxcore
 - [ ] toxav
 - [ ] toxdns
-- [ ] toxencryptsave
+- [x] toxencryptsave
 - [x] tox_old.h (old groupchats)
 - [ ] Higher level API
 
