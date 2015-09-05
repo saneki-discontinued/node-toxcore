@@ -36,7 +36,19 @@ var tox = new toxcore.Tox();
 
 // ... or, create a Tox instance using specific paths for toxcore libraries
 var toxAtPath = new toxcore.Tox({
-  path: '/path/to/libtoxcore.so'
+  path: '/path/to/libtoxcore.so',
+  crypto: '/path/to/libtoxencryptsave.so'
+});
+
+// ... or, give Tox some data to load
+var toxWithData = new toxcore.Tox({
+  data: '/path/to/toxfile'
+});
+
+// ... if that data is encrypted, include a passphrase
+var toxWithEncData = new toxcore.Tox({
+  data: '/path/to/encrypted/toxfile',
+  pass: 'myPassphrase'
 });
 
 // Bootstrap from nodes (see a list at: https://wiki.tox.im/Nodes)
