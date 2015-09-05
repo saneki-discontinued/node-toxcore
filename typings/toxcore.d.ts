@@ -7,16 +7,6 @@ declare module 'toxcore' {
   import events = require('events');
   import EventEmitter = events.EventEmitter;
 
-  interface ToxConstructorOptions {
-    path?: string;
-    data?: Buffer|string; // (Buffer|string)
-  }
-
-  interface ToxOldConstructorOptions {
-    path?: string;
-    tox: Tox;
-  }
-
   interface ErrorCallback {
     (err: Error): void;
   }
@@ -53,6 +43,49 @@ declare module 'toxcore' {
     (err: Error, tox: Tox): void;
   }
 
+  interface ToxPassKey {
+  }
+
+  interface ToxPassKeyCallback {
+    (err: Error, passKey: ToxPassKey): void;
+  }
+
+  interface ToxEncryptSaveConstructorOptions {
+    path?: string;
+  }
+
+  export class ToxEncryptSave {
+    constructor(opts?: ToxEncryptSaveConstructorOptions);
+    getLibrary(): any; // ffi.Library
+
+    decrypt(data: Buffer, pass: Buffer|string, callback?: BufferCallback): void;
+    decryptSync(data: Buffer, pass: Buffer|string): Buffer;
+    encrypt(data: Buffer, pass: Buffer|string, callback?: BufferCallback): void;
+    encryptSync(data: Buffer, pass: Buffer|string): Buffer;
+    getSalt(data: Buffer, callback?: BufferCallback): void;
+    getSaltSync(data: Buffer): Buffer;
+    isDataEncrypted(data: Buffer, callback?: BooleanCallback): void;
+    isDataEncryptedSync(data: Buffer): boolean;
+    deriveKeyFromPass(pass: Buffer|string, callback?: ToxPassKeyCallback): void;
+    deriveKeyFromPassSync(pass: Buffer|string): ToxPassKey;
+    deriveKeyWithSalt(pass: Buffer|string, salt: Buffer, callback?: ToxPassKeyCallback): void;
+    deriveKeyWithSaltSync(pass: Buffer|string, salt: Buffer): ToxPassKey;
+    encryptFile(filepath: string, data: Buffer, pass: Buffer|string, callback?: ErrorCallback): void;
+    encryptFileSync(filepath: string, data: Buffer, pass: Buffer|string): void;
+    encryptPassKey(data: Buffer, passKey: ToxPassKey, callback?: BufferCallback): void;
+    encryptPassKeySync(data: Buffer, passKey: ToxPassKey): Buffer;
+    decryptFile(filepath: string, pass: Buffer|string, callback?: BufferCallback): void;
+    decryptFileSync(filepath: string, pass: Buffer|string): Buffer;
+    decryptPassKey(data: Buffer, passKey: ToxPassKey, callback?: BufferCallback): void;
+    decryptPassKeySync(data: Buffer, passKey: ToxPassKey): Buffer;
+  }
+
+  interface ToxConstructorOptions {
+    path?: string;
+    data?: Buffer|string;
+    crypto?: ToxEncryptSave|boolean|Object|string;
+  }
+
   // Leaving out freeOptions/newOptions functions
   export class Tox {
     constructor(opts?: ToxConstructorOptions);
@@ -60,10 +93,12 @@ declare module 'toxcore' {
     static load(callback: ToxCallback): void;
 
     createLibrary(libpath?: string): any; // ffi.Library
+    crypto(): ToxEncryptSave;
     free(): void;
     getEmitter(): EventEmitter;
     getHandle(): any;
     getLibrary(): any; // ffi.Library
+    hasCrypto(): boolean;
     hasHandle(): boolean;
     isStarted(): boolean;
     isTcp(): boolean;
@@ -206,6 +241,11 @@ declare module 'toxcore' {
     versionMinorSync(): number;
     versionPatch(callback?: NumberCallback): void;
     versionPatchSync(): number;
+  }
+
+  interface ToxOldConstructorOptions {
+    path?: string;
+    tox: Tox;
   }
 
   export class ToxOld {
@@ -406,5 +446,25 @@ declare module 'toxcore' {
     TOX_SAVEDATA_TYPE_NONE: number, //0,
     TOX_SAVEDATA_TYPE_TOX_SAVE: number, //1,
     TOX_SAVEDATA_TYPE_SECRET_KEY: number, //2
+
+    TOX_PASS_KEY_LENGTH: number, //32,
+    TOX_PASS_SALT_LENGTH: number, //32,
+    TOX_PASS_ENCRYPTION_EXTRA_LENGTH: number, //80,
+
+    TOX_ERR_DECRYPTION_OK: number, //0,
+    TOX_ERR_DECRYPTION_NULL: number, //1,
+    TOX_ERR_DECRYPTION_INVALID_LENGTH: number, //2,
+    TOX_ERR_DECRYPTION_BAD_FORMAT: number, //3,
+    TOX_ERR_DECRYPTION_KEY_DERIVATION_FAILED: number, //4,
+    TOX_ERR_DECRYPTION_FAILED: number, //5,
+
+    TOX_ERR_ENCRYPTION_OK: number, //0,
+    TOX_ERR_ENCRYPTION_NULL: number, //1,
+    TOX_ERR_ENCRYPTION_KEY_DERIVATION_FAILED: number, //2,
+    TOX_ERR_ENCRYPTION_FAILED: number, //3,
+
+    TOX_ERR_KEY_DERIVATION_OK: number, //0,
+    TOX_ERR_KEY_DERIVATION_NULL: number, //1,
+    TOX_ERR_KEY_DERIVATION_FAILED: number, //2
   }
 }
