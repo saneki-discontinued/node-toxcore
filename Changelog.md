@@ -1,6 +1,10 @@
 Changelog
 =========
 
+v1.2.0
+------
+- Added ToxEncryptSave for libtoxencryptsave.
+
 v1.1.4
 ------
 - Added lossless/lossy packet functionality (credits: [OguzhanE]).
