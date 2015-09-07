@@ -18,7 +18,9 @@
 
 var assert = require('assert');
 var buffertools = require('buffertools');
+var dns = require('dns');
 var should = require('should');
+var util = require('util');
 var path = require('path');
 var ToxDns = require(path.join(__dirname, '..', 'lib', 'toxdns'));
 
@@ -28,6 +30,23 @@ describe('ToxDns', function() {
   var toxdns = new ToxDns(),
       toxdnsKilled = new ToxDns();
   toxdnsKilled.killSync();
+
+  describe('generating and decrypting', function() {
+    it('should do stuff right (manually)', function(done) {
+      var info = toxdns.generateSync('saneki@toxme.io'),
+          full = util.format('_%s._tox.%s', info.record, 'toxme.io');
+      dns.resolveTxt(full, function(err, txts) {
+        /** Everything here is theoretical
+        if(!err) {
+          var result = txts[0][0],
+              addr = toxdns.decryptSync(result, info.id);
+          addr.should.be.a.Buffer;
+        } else done(err);
+        **/
+        done();
+      });
+    });
+  });
 
   describe('#hasHandle()', function() {
     it('should return true when handle', function() {
