@@ -46,6 +46,26 @@ describe('ToxDns', function() {
         } else done(err);
       });
     });
+
+    it('should do stuff right (manually, async)', function(done) {
+      toxdns.generate('saneki', function(err, info) {
+        if(!err) {
+          var full = util.format('_%s._tox.%s', info.record, 'toxme.io');
+          dns.resolveTxt(full, function(err, txts) {
+            if(!err) {
+              var result = txts[0][0],
+                  id = result.match(/(^|;)id=([a-zA-Z0-9]+)/)[2];
+              toxdns.decrypt(id, info.id, function(err, addr) {
+                if(!err) {
+                  addr.should.be.a.Buffer;
+                  done();
+                } else done(err);
+              });
+            } else done(err);
+          });
+        } else done(err);
+      });
+    });
   });
 
   describe('#hasHandle()', function() {
