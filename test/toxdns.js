@@ -31,19 +31,19 @@ describe('ToxDns', function() {
       toxdnsKilled = new ToxDns();
   toxdnsKilled.killSync();
 
+  // This may fail if not resolved within 2 seconds
   describe('generating and decrypting', function() {
     it('should do stuff right (manually)', function(done) {
-      var info = toxdns.generateSync('saneki@toxme.io'),
+      var info = toxdns.generateSync('saneki'),
           full = util.format('_%s._tox.%s', info.record, 'toxme.io');
       dns.resolveTxt(full, function(err, txts) {
-        /** Everything here is theoretical
         if(!err) {
           var result = txts[0][0],
-              addr = toxdns.decryptSync(result, info.id);
+              id = result.match(/(^|;)id=([a-zA-Z0-9]+)/)[2],
+              addr = toxdns.decryptSync(id, info.id);
           addr.should.be.a.Buffer;
+          done();
         } else done(err);
-        **/
-        done();
       });
     });
   });
