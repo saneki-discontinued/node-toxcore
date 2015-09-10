@@ -66,6 +66,24 @@ describe('ToxDns', function() {
         } else done(err);
       });
     });
+
+    it('should do stuff right', function(done) {
+      toxdns.resolve('saneki@toxme.io', function(err, address) {
+        if(!err) {
+          address.should.be.a.Buffer;
+          done();
+        } else done(err);
+      });
+    });
+
+    it('should do stuff right (hex)', function(done) {
+      toxdns.resolveHex('saneki@toxme.io', function(err, address) {
+        if(!err) {
+          address.should.be.a.string;
+          done();
+        } else done(err);
+      });
+    });
   });
 
   describe('#hasHandle()', function() {
