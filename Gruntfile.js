@@ -1,5 +1,10 @@
 module.exports = function(grunt) {
   grunt.initConfig({
+    shell: {
+      mocha: {
+        command: 'mocha --recursive'
+      }
+    },
     jsdoc: {
       dist: {
         src: [
@@ -21,6 +26,8 @@ module.exports = function(grunt) {
   });
 
   grunt.loadNpmTasks('grunt-jsdoc');
+  grunt.loadNpmTasks('grunt-shell');
 
   grunt.registerTask('default', ['jsdoc']);
+  grunt.registerTask('test', ['shell']);
 };
