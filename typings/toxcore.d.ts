@@ -43,6 +43,38 @@ declare module 'toxcore' {
     (err: Error, tox: Tox): void;
   }
 
+  interface GenerateObject {
+    record: string;
+    id: number;
+  }
+
+  interface GenerateCallback {
+    (err: Error, generate: GenerateObject): void;
+  }
+
+  interface ToxDnsConstructorOptions {
+    path?: string;
+    key?: Buffer|string;
+  }
+
+  interface ToxDns {
+    constructor(opts?: ToxDnsConstructorOptions);
+    hasHandle(): boolean;
+    getHandle(): any;
+    getKey(): Buffer;
+    getKeyHex(): string;
+    getLibrary(): any;
+    resolve(address: string, callback?: BufferCallback): void;
+    resolveHex(address: string, callback?: StringCallback): void;
+
+    decrypt(record: string, requestId: number, callback?: BufferCallback): void;
+    decryptSync(record: string, requestId: number): Buffer;
+    generate(name: string, callback?: GenerateCallback): void;
+    generateSync(name: string): GenerateObject;
+    kill(callback?: ErrorCallback): void;
+    killSync(): void;
+  }
+
   interface ToxPassKey {
   }
 
