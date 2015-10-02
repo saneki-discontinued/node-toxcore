@@ -8,13 +8,6 @@ Node.js bindings for [libtoxcore], built off of [node-ffi].
 Note: Installing this package does not install [libtoxcore]. It is expected
 that [libtoxcore] is installed prior to using **node-toxcore**.
 
-### New API
-
-**node-toxcore** now uses the new toxcore api. If you want
-to use the old api, specify version `0.0.18` in your package.json. Note
-that support for the old api is discontinued, and version `0.0.18` may
-have bugs or not support certain things.
-
 
 ### New API Progress
 
