@@ -18,8 +18,8 @@ module.exports = function(grunt) {
         options: {
           destination: 'doc',
           private: false,
-          template : 'node_modules/grunt-jsdoc/node_modules/ink-docstrap/template',
-          configure : 'node_modules/grunt-jsdoc/node_modules/ink-docstrap/template/jsdoc.conf.json'
+          template : 'node_modules/ink-docstrap/template',
+          configure : 'node_modules/ink-docstrap/template/jsdoc.conf.json'
         }
       }
     }
@@ -29,5 +29,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-shell');
 
   grunt.registerTask('default', ['jsdoc']);
+  grunt.registerTask('doc', ['jsdoc']);
   grunt.registerTask('test', ['shell']);
 };
