@@ -20,7 +20,7 @@
   },
 
   "scripts": {
-    "test": "grunt test"
+    "test": "mocha"
   },
 
   "dependencies": {
