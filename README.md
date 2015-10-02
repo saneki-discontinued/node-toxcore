@@ -1,7 +1,7 @@
-node-toxcore
+node-toxcore [![Build Status](https://img.shields.io/travis/saneki/node-toxcore.svg?style=flat-square)](http://travis-ci.org/saneki/node-toxcore) [![NPM Version](https://img.shields.io/npm/v/toxcore.svg?style=flat-square)](https://www.npmjs.org/package/toxcore) [![Dependency Status](https://david-dm.org/saneki/node-toxcore.svg?style=flat-square)](https://david-dm.org/saneki/node-toxcore)
 ============
 
-[![NPM](https://nodei.co/npm/toxcore.png?mini=true)](https://nodei.co/npm/toxcore/) [![Build Status](https://img.shields.io/travis/saneki/node-toxcore.svg?style=flat-square)](http://travis-ci.org/saneki/node-toxcore) [![NPM Version](https://img.shields.io/npm/v/toxcore.svg?style=flat-square)](https://www.npmjs.org/package/toxcore) [![Dependency Status](https://david-dm.org/saneki/node-toxcore.svg?style=flat-square)](https://david-dm.org/saneki/node-toxcore)
+[![NPM](https://nodei.co/npm/toxcore.png?mini=true)](https://nodei.co/npm/toxcore/)
 
 Node.js bindings for [libtoxcore], built off of [node-ffi].
 
