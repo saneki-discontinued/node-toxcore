@@ -3,6 +3,8 @@ node-toxcore [![Build Status](https://img.shields.io/travis/saneki/node-toxcore.
 
 [![NPM](https://nodei.co/npm/toxcore.png)](https://nodei.co/npm/toxcore/)
 
+[![Dependency Status](https://david-dm.org/saneki/node-toxcore.svg)](https://david-dm.org/saneki/node-toxcore)
+
 Node.js bindings for [libtoxcore], built off of [node-ffi].
 
 Note: Installing this package does not install [libtoxcore]. It is expected
