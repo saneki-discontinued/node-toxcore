@@ -8,7 +8,6 @@
     "name": "saneki",
     "email": "s@neki.me"
   },
-
   "main": "./lib/main.js",
   "files": ["lib", "typings"],
   "directories": {
@@ -18,11 +17,9 @@
     "type": "git",
     "url": "https://github.com/saneki/node-toxcore.git"
   },
-
   "scripts": {
     "test": "mocha"
   },
-
   "dependencies": {
     "buffertools": "2",
     "ffi": "saneki/node-ffi#gh_ffi_244_fix",
@@ -31,7 +28,6 @@
     "ref-array": "1",
     "underscore": "1"
   },
-
   "devDependencies": {
     "async": "1",
     "grunt": "0.4",
