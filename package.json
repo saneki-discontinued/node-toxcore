@@ -22,8 +22,8 @@
   },
   "dependencies": {
     "buffertools": "2",
-    "ffi": "saneki/node-ffi#gh_ffi_244_fix",
-    "ref": "saneki/ref#gh_ffi_244_fix",
+    "ffi": "2",
+    "ref": "^1.2",
     "ref-struct": "1",
     "ref-array": "1",
     "underscore": "1"
