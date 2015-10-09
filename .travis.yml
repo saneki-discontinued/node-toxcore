@@ -6,6 +6,12 @@ node_js:
   - "2"
   - "3.2"
   - "4"
+# io.js v3+ requires C++11
+before_install:
+  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq g++-4.8
+  - export CXX="g++-4.8"
 # This is basically copied from toxcore's .travis.yml, without libcheck
 # Unsure of a better way of getting toxcore+deps installed
 before_script:
