@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v1.3.0
+------
+- Added ToxDns for libtoxdns.
+- Updated dependencies to support node.js v4.
+
 v1.2.0
 ------
 - Added ToxEncryptSave for libtoxencryptsave.
