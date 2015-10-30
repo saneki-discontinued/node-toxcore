@@ -35,7 +35,7 @@ var groupchats = {
 
 /**
  * Bootstrap tox via hardcoded nodes.
- * For more nodes, see: https://wiki.tox.im/Nodes
+ * For more nodes, see: https://wiki.tox.chat/users/nodes
  */
 var bootstrap = function(callback) {
   // Define nodes to bootstrap from

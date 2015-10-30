@@ -22,7 +22,10 @@
 var toxcore = require('toxcore');
 var tox = new toxcore.Tox();
 
-// Specify nodes to bootstrap from
+/**
+ * Bootstrap tox via hardcoded nodes.
+ * For more nodes, see: https://wiki.tox.chat/users/nodes
+ */
 var nodes = [
   { maintainer: 'Impyy',
     address: '178.62.250.138',

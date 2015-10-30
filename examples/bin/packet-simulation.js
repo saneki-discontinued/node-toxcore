@@ -23,8 +23,11 @@ var tx = new toxcore.Tox(), rx = new toxcore.Tox();
 var LOSSLESS_CHANNEL = 160;
 var LOSSY_CHANNEL = 200;
 
-// Specify nodes to bootstrap from
-var nodes = [
+/*
+ * Bootstrap tox via hardcoded nodes.
+ * For more nodes, see: https://wiki.tox.chat/users/nodes
+ */
+ var nodes = [
   { maintainer: 'saneki',
     address: '96.31.85.154',
     port: 33445,
