@@ -44,7 +44,7 @@ var toxWithEncData = new toxcore.Tox({
   pass: 'myPassphrase'
 });
 
-// Bootstrap from nodes (see a list at: https://wiki.tox.im/Nodes)
+// Bootstrap from nodes (see a list at: https://wiki.tox.chat/users/nodes)
 tox.bootstrapSync('23.226.230.47', 33445, 'A09162D68618E742FFBCA1C2C70385E6679604B2D80EA6E84AD0996A1AC8A074'); // stal
 tox.bootstrapSync('104.219.184.206', 443, '8CD087E31C67568103E8C2A28653337E90E6B8EDA0D765D57C6B5172B4F1F04C'); // Jfreegman
 

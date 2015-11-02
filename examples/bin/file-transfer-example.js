@@ -69,7 +69,10 @@ var fixRecvFilename = function(filename) {
   return filename;
 };
 
-// Specify nodes to bootstrap from
+/**
+ * Bootstrap tox via hardcoded nodes.
+ * For more nodes, see: https://wiki.tox.chat/users/nodes
+ */
 var nodes = [
   { maintainer: 'saneki',
     address: '96.31.85.154',

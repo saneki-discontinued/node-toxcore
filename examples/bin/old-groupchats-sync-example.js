@@ -29,7 +29,10 @@ var TOX_CHAT_CHANGE_PEER_ADD = 0;
 var TOX_CHAT_CHANGE_PEER_DEL = 1;
 var TOX_CHAT_CHANGE_PEER_NAME = 2;
 
-// Specify nodes to bootstrap from
+/**
+ * Bootstrap tox via hardcoded nodes.
+ * For more nodes, see: https://wiki.tox.chat/users/nodes
+ */
 var nodes = [
   { maintainer: 'saneki',
     address: '96.31.85.154',
